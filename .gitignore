@@ -1,0 +1,18 @@
+# NetBeans IDE Project Files
+
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+
+# General Java Files
+
+\*.jar
+\*.war
+\*.zip
+\*.log
+
+# Compiled class files
+
+/build/
+/classes/
