@@ -1,13 +1,9 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ Aitana Alvarez 340201
+ Francisco Bonanni 299134
  */
 package p2obligatorio2;
 
-/**
- *
- * @author franc
- */
 public class P2Obligatorio2 {
 
     /**
