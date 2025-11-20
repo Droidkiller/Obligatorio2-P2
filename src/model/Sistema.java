@@ -10,17 +10,20 @@ public class Sistema {
     private final ArrayList<Area> areas;
     private final ArrayList<Manager> manager;
     private final ArrayList<Empleado> empleados;
+    private ArrayList<Movimiento> movimientos = new ArrayList<>();
    
 
     public Sistema() {
         this.areas = new ArrayList<>();
         this.manager = new ArrayList<>();
         this.empleados = new ArrayList<>();
+        this.movimientos = new ArrayList<>();
     }
     
     public ArrayList<Area> getAreas() {return areas;}
     public ArrayList<Manager> getManager() {return manager;}
     public ArrayList<Empleado> getEmpleados() {return empleados;}
+    public ArrayList<Movimiento> getMovimientos() {return movimientos;}
     
     public void agregarEmpleado(Empleado emp){
         empleados.add(emp);
@@ -41,5 +44,9 @@ public class Sistema {
     } 
      public void quitarArea(Area a){
         areas.remove(a);
+    }
+     
+    public void registrarMovimiento(Movimiento m) {
+        movimientos.add(m);
     }
 }
