@@ -1,14 +1,14 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ Aitana Alvarez 340201
+ Francisco Bonanni 299134
  */
 package view;
 
-/**
- *
- * @author Usuario
- */
-public class ModificarManager extends javax.swing.JDialog {
+import model.Manager;
+import model.Sistema;
+import model.Observer;
+
+public class ModificarManager extends javax.swing.JDialog implements Observer {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ModificarManager.class.getName());
 
@@ -249,6 +249,29 @@ public class ModificarManager extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+    }
+    
+    public javax.swing.JList<String> getListMan() {return listMan;}
+    public String getNombre() { return textNom.getText(); }
+    public String getCedula() { return textCed.getText(); }
+    public String getAntiguedad() { return textAnt.getText(); }
+    public String getCelular() { return textCel.getText(); }
+    public String getCantidadEmpleados() { return textCntEmp.getText(); }
+    public javax.swing.JButton getBtnGuardar() { return btnGuardar; }
+    public javax.swing.JButton getBtnCerrar() { return btnCerrar; }
+    public void setListaManagers(java.util.List<Manager> managers) {
+        listMan.setListData(managers.stream().map(Manager::getNombre).toArray(String[]::new));
+    }
+    public void setNombre(String nombre) { textNom.setText(nombre); }
+    public void setCedula(String cedula) { textCed.setText(cedula); }
+    public void setAntiguedad(String ant) { textAnt.setText(ant); }
+    public void setCelular(String cel) { textCel.setText(cel); }
+    public void setCantidadEmpleados(String cnt) { textCntEmp.setText(cnt); }
+    
+    @Override
+    public void actualizar() {
+        var sistema = Sistema.getInstancia();
+        setListaManagers(sistema.getManagers());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

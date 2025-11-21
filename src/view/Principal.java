@@ -1,13 +1,9 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ Aitana Alvarez 340201
+ Francisco Bonanni 299134
  */
 package view;
 
-/**
- *
- * @author Usuario
- */
 public class Principal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Principal.class.getName());
@@ -168,6 +164,10 @@ public class Principal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new Principal().setVisible(true));
     }
+    
+    public javax.swing.JMenuItem getAltaMan() {return altaMan;}
+    public javax.swing.JMenuItem getBajaMan() {return bajaMan;}
+    public javax.swing.JMenuItem getModificacionMan() {return modificacionMan;}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem altaArea;

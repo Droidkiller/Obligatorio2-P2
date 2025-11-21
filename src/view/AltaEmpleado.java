@@ -1,23 +1,24 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ Aitana Alvarez 340201
+ Francisco Bonanni 299134
  */
 package view;
 
-/**
- *
- * @author Usuario
- */
-public class AltaEmpleado extends javax.swing.JDialog {
+import model.*;
+import java.util.ArrayList;
+
+public class AltaEmpleado extends javax.swing.JDialog implements Observer{
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AltaEmpleado.class.getName());
-
+    
     /**
      * Creates new form AltaEmpleado
      */
     public AltaEmpleado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        cmbManagers.setModel(new javax.swing.DefaultComboBoxModel<Manager>());
+        cmbAreas.setModel(new javax.swing.DefaultComboBoxModel<Area>());
     }
 
     /**
@@ -48,8 +49,8 @@ public class AltaEmpleado extends javax.swing.JDialog {
         jScrollPane2 = new javax.swing.JScrollPane();
         textCV = new javax.swing.JTextArea();
         textSal = new javax.swing.JTextField();
-        comboMan = new javax.swing.JComboBox<>();
-        comboArea = new javax.swing.JComboBox<>();
+        cmbManagers = new javax.swing.JComboBox();
+        cmbAreas = new javax.swing.JComboBox();
         btnCrear = new javax.swing.JButton();
         btnCerrar = new javax.swing.JButton();
 
@@ -101,9 +102,9 @@ public class AltaEmpleado extends javax.swing.JDialog {
         textCV.setRows(5);
         jScrollPane2.setViewportView(textCV);
 
-        comboMan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbManagers.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        comboArea.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbAreas.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -140,9 +141,9 @@ public class AltaEmpleado extends javax.swing.JDialog {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(comboMan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cmbManagers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(textSal, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(comboArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(cmbAreas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -181,9 +182,9 @@ public class AltaEmpleado extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(textSal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(comboMan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbManagers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(comboArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbAreas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
 
@@ -253,9 +254,6 @@ public class AltaEmpleado extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_textCedActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -289,12 +287,69 @@ public class AltaEmpleado extends javax.swing.JDialog {
             }
         });
     }
+    
+    public void setManagers(ArrayList<Manager> managers) {
+        cmbManagers.removeAllItems();
+        for (Manager m : managers) {
+            cmbManagers.addItem(m);
+        }
+    }
+
+    public void setAreas(ArrayList<Area> areas) {
+        cmbAreas.removeAllItems();
+        for (Area a : areas) {
+            cmbAreas.addItem(a);
+        }
+    }
+    
+    public String getNombre() {
+        return textNom.getText();
+    }
+
+    public int getCedula() {
+        return Integer.parseInt(textCed.getText());
+    }
+
+    public int getCelular() {
+        return Integer.parseInt(textCel.getText());
+    }
+
+    public double getSalario() {
+        return Double.parseDouble(textSal.getText());
+    }
+
+    public String getCvTexto() {
+        return textCV.getText();
+    }
+
+    public Manager getManagerSeleccionado() {
+        return (Manager) cmbManagers.getSelectedItem();
+    }
+
+    public Area getAreaSeleccionada() {
+        return (Area) cmbAreas.getSelectedItem();
+    }
+    
+    public javax.swing.JButton getBtnCrear() {
+        return btnCrear;
+    }
+
+    public javax.swing.JButton getBtnCerrar() {
+        return btnCerrar;
+    }
+    
+    @Override
+    public void actualizar() {
+        var sistema = Sistema.getInstancia();
+        setManagers(sistema.getManagers());
+        setAreas(sistema.getAreas());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnCrear;
-    private javax.swing.JComboBox<String> comboArea;
-    private javax.swing.JComboBox<String> comboMan;
+    private javax.swing.JComboBox cmbAreas;
+    private javax.swing.JComboBox cmbManagers;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

@@ -1,14 +1,18 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ Aitana Alvarez 340201
+ Francisco Bonanni 299134
  */
 package view;
 
-/**
- *
- * @author Usuario
- */
-public class AltaManagers extends javax.swing.JDialog {
+import javax.swing.DefaultListModel;
+import model.Manager;
+import model.Observer;
+import model.Sistema;
+import java.util.Collections;
+import java.util.Comparator;
+
+
+public class AltaManagers extends javax.swing.JDialog implements Observer {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AltaManagers.class.getName());
 
@@ -227,6 +231,51 @@ public class AltaManagers extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+    }
+    
+    public javax.swing.JButton getBtnCrear() {
+        return btnCrear;
+    }
+
+    public javax.swing.JButton getBtnCerrar() {
+        return btnCerrar;
+    }
+
+    public String getNombre() {
+        return textNom.getText();
+    }
+
+    public int getCedula() {
+        return Integer.parseInt(textCed.getText());
+    }
+
+    public int getAntiguedad() {
+        return Integer.parseInt(textAnt.getText());
+    }
+
+    public int getCelular() {
+        return Integer.parseInt(textCel.getText());
+    }
+
+    public void setListaManagers(java.util.List<Manager> managers) {
+        Collections.sort(managers, new Comparator<Manager>() {
+            @Override
+            public int compare(Manager m1, Manager m2) {
+                return Integer.compare(m2.getAntiguedad(), m1.getAntiguedad());
+            }
+        });
+        
+        DefaultListModel<String> model = new DefaultListModel<>();
+        for (Manager m : managers) {
+            model.addElement(m.getNombre());
+        }
+        listManagers.setModel(model);
+    }
+    
+    @Override
+    public void actualizar() {
+        var sistema = Sistema.getInstancia();
+        setListaManagers(sistema.getManagers());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
