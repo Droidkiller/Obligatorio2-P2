@@ -71,6 +71,7 @@ public class Area {
             setCostosMensuales(m, -sueldoMensual);
         }
 }
+    
  
     @Override
     public String toString() {

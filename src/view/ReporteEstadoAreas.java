@@ -4,21 +4,41 @@
  */
 package view;
 
-/**
- *
- * @author Usuario
- */
-public class ReporteEstadoAreas extends javax.swing.JDialog {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ReporteEstadoAreas.class.getName());
+import java.awt.Color;
+import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
-    /**
-     * Creates new form ReporteEstadoAreas
-     */
-    public ReporteEstadoAreas(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-    }
+import model.Area;
+import model.Empleado;
+import model.Sistema;
+import model.Observer;
+
+public class ReporteEstadoAreas extends javax.swing.JDialog implements Observer {
+    
+    private final Sistema sistema = Sistema.getInstancia();
+    private List<Area> areasOrdenadas = new ArrayList<>();
+
+
+   public ReporteEstadoAreas(java.awt.Frame parent, boolean modal) {
+    super(parent, modal);
+    initComponents();
+    
+    sistema.agregarObserver(this);
+
+    panelArea.setLayout(new java.awt.GridLayout(0, 1, 5, 5));
+    panelEmpleados.setLayout(new java.awt.GridLayout(0, 3, 5, 5));
+
+    refrescar();
+}
+@Override
+public void actualizar() {
+    refrescar();
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,20 +50,18 @@ public class ReporteEstadoAreas extends javax.swing.JDialog {
     private void initComponents() {
 
         labTitulo = new javax.swing.JLabel();
-        panelArea = new javax.swing.JPanel();
-        panelEmpleados = new javax.swing.JPanel();
         labAreas = new javax.swing.JLabel();
         labSel = new javax.swing.JLabel();
         labAreaSel = new javax.swing.JLabel();
         labPor = new javax.swing.JLabel();
+        scrollPanelArea = new javax.swing.JScrollPane();
+        panelArea = new javax.swing.JPanel();
+        scrollPanelEmpleado = new javax.swing.JScrollPane();
+        panelEmpleados = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         labTitulo.setText("Estado de áreas");
-
-        panelArea.setLayout(new java.awt.GridLayout(0, 1));
-
-        panelEmpleados.setLayout(new java.awt.GridLayout(0, 3));
 
         labAreas.setText("Áreas");
 
@@ -52,6 +70,12 @@ public class ReporteEstadoAreas extends javax.swing.JDialog {
         labAreaSel.setText("Área seleccionada: ");
 
         labPor.setText("Presupuesto asignado:  %");
+
+        panelArea.setLayout(new java.awt.GridLayout(0, 1));
+        scrollPanelArea.setViewportView(panelArea);
+
+        panelEmpleados.setLayout(new java.awt.GridLayout(0, 3));
+        scrollPanelEmpleado.setViewportView(panelEmpleados);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,19 +89,19 @@ public class ReporteEstadoAreas extends javax.swing.JDialog {
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labAreas, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(panelArea, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labSel)
-                            .addComponent(panelEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(labAreaSel)
                         .addGap(57, 57, 57)
                         .addComponent(labPor)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addContainerGap(86, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labAreas, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scrollPanelArea, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labSel)
+                            .addComponent(scrollPanelEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -89,13 +113,14 @@ public class ReporteEstadoAreas extends javax.swing.JDialog {
                     .addComponent(labSel)
                     .addComponent(labAreas))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panelArea, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
-                    .addComponent(panelEmpleados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labAreaSel)
-                    .addComponent(labPor))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(scrollPanelEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(labAreaSel)
+                            .addComponent(labPor)))
+                    .addComponent(scrollPanelArea, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(93, Short.MAX_VALUE))
         );
 
@@ -106,39 +131,165 @@ public class ReporteEstadoAreas extends javax.swing.JDialog {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+        java.awt.EventQueue.invokeLater(() -> {
+            ReporteEstadoAreas dialog = new ReporteEstadoAreas(new javax.swing.JFrame(), true);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    System.exit(0);
                 }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                ReporteEstadoAreas dialog = new ReporteEstadoAreas(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
+            });
+            dialog.setVisible(true);
         });
+
+    }
+    private void refrescar() {
+        cargarAreas();
+        limpiarEmpleados();
+        labAreaSel.setText("Área seleccionada: ");
+        labPor.setText("Presupuesto asignado:  %");
     }
 
+    private void limpiarEmpleados() {
+        panelEmpleados.removeAll();
+        panelEmpleados.revalidate();
+        panelEmpleados.repaint();
+    }
+
+ private void cargarAreas() {
+        panelArea.removeAll();
+
+        areasOrdenadas = new ArrayList<>(sistema.getAreas());
+
+        // ordenar por porcentaje de presupuesto anual asignado, de mayor a menor
+        Collections.sort(areasOrdenadas, new Comparator<Area>() {
+            @Override
+            public int compare(Area a1, Area a2) {
+                return Double.compare(porcentajeAsignado(a2), porcentajeAsignado(a1));
+            }
+        });
+
+        for (Area area : areasOrdenadas) {
+            JButton btn = new JButton(area.getNombre());
+            btn.setMargin(new Insets(-5, -5, -5, -5));
+
+            double p = porcentajeAsignado(area); 
+
+            if (p > 0.90) {
+                btn.setBackground(Color.RED);
+            } else if (p >= 0.70) {
+                btn.setBackground(Color.YELLOW);
+            } else {
+                btn.setBackground(Color.LIGHT_GRAY);
+            }
+            btn.setOpaque(true);
+            btn.setBorderPainted(false);
+
+            btn.addActionListener(e -> seleccionarArea(area));
+
+            panelArea.add(btn);
+        }
+
+        panelArea.revalidate();
+        panelArea.repaint();
+    }
+
+    private double porcentajeAsignado(Area area) {
+        double totalSueldosAnuales = 0;
+
+        // suma de salarios anuales de los empleados del área
+        for (Empleado e : area.getEmpleados()) {
+            totalSueldosAnuales += e.getSalario() * 12;
+        }
+
+        if (area.getPresupuesto() == 0) {
+            return 0;
+        }
+        return totalSueldosAnuales / area.getPresupuesto(); 
+    }
+    
+    private void seleccionarArea(Area area) {
+        double porcentajeAsignadoArea = porcentajeAsignado(area);
+
+        labAreaSel.setText("Área seleccionada: " + area.getNombre());
+        labPor.setText(String.format("Presupuesto asignado: %.0f%%", porcentajeAsignadoArea * 100));
+
+        cargarEmpleados(area);
+        
+    }
+
+    
+ private void cargarEmpleados(Area area) {
+    panelEmpleados.removeAll();
+
+    ArrayList<Empleado> lista = new ArrayList<>(area.getEmpleados());
+    Collections.sort(lista, Comparator.comparing(Empleado::getNombre));
+
+    if (lista.isEmpty()) {
+        panelEmpleados.revalidate();
+        panelEmpleados.repaint();
+        return;
+    }
+
+    double min = Double.MAX_VALUE;
+    double max = Double.MIN_VALUE;
+    for (Empleado e : lista) {
+        double s = e.getSalario();
+        if (s < min) min = s;
+        if (s > max) max = s;
+    }
+
+    for (Empleado emp : lista) {
+        JButton btn = new JButton(emp.getNombre());
+       
+        btn.setMargin(new Insets(-5, -5, -5, -5));
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+        btn.setOpaque(true);
+        btn.setForeground(Color.WHITE);
+
+        double salario = emp.getSalario();
+        btn.setBackground(colorEscalaAzul(salario, min, max));
+
+        btn.addActionListener(e -> mostrarEmpleado(emp));
+
+        panelEmpleados.add(btn);
+    }
+
+    panelEmpleados.revalidate();
+    panelEmpleados.repaint();
+}
+
+
+    private Color colorEscalaAzul(double salario, double min, double max) {
+        if (max <= min) {
+            return Color.BLACK;
+        }
+        double t = (salario - min) / (max - min); 
+        int r = 0;
+        int g = 0;
+        int b = (int) Math.round(255 * t);
+        return new Color(r, g, b);
+    }
+
+    private void mostrarEmpleado(Empleado e) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Nombre: ").append(e.getNombre()).append("\n");
+        sb.append("Cédula: ").append(e.getCedula()).append("\n");
+        sb.append("Celular: ").append(e.getCelular()).append("\n");
+        sb.append("Salario mensual: ").append(e.getSalario()).append("\n");
+        sb.append("Manager: ").append(e.getManager().getNombre()).append("\n");
+        sb.append("Área: ").append(e.getArea().getNombre()).append("\n");
+
+        JOptionPane.showMessageDialog(
+                this,
+                sb.toString(),
+                "Información del empleado",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+    
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel labAreaSel;
     private javax.swing.JLabel labAreas;
@@ -147,5 +298,7 @@ public class ReporteEstadoAreas extends javax.swing.JDialog {
     private javax.swing.JLabel labTitulo;
     private javax.swing.JPanel panelArea;
     private javax.swing.JPanel panelEmpleados;
+    private javax.swing.JScrollPane scrollPanelArea;
+    private javax.swing.JScrollPane scrollPanelEmpleado;
     // End of variables declaration//GEN-END:variables
 }
