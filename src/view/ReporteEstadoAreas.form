@@ -31,25 +31,25 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="labAreas" alignment="0" min="-2" pref="37" max="-2" attributes="0"/>
-                          <Component id="panelArea" alignment="0" min="-2" pref="144" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="51" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="labSel" min="-2" max="-2" attributes="0"/>
-                          <Component id="panelEmpleados" min="-2" pref="160" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Component id="labAreaSel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
                       <Component id="labPor" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace pref="86" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="labAreas" min="-2" pref="37" max="-2" attributes="0"/>
+                          <Component id="scrollPanelArea" min="-2" pref="100" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="labSel" min="-2" max="-2" attributes="0"/>
+                          <Component id="scrollPanelEmpleado" min="-2" pref="100" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -64,14 +64,16 @@
                   <Component id="labAreas" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="panelArea" pref="117" max="32767" attributes="0"/>
-                  <Component id="panelEmpleados" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labAreaSel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="labPor" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="scrollPanelEmpleado" min="-2" pref="100" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="labAreaSel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="labPor" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Component id="scrollPanelArea" min="-2" pref="100" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="93" max="32767" attributes="0"/>
           </Group>
@@ -84,20 +86,6 @@
         <Property name="text" type="java.lang.String" value="Estado de &#xe1;reas"/>
       </Properties>
     </Component>
-    <Container class="javax.swing.JPanel" name="panelArea">
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-        <Property name="columns" type="int" value="1"/>
-        <Property name="rows" type="int" value="0"/>
-      </Layout>
-    </Container>
-    <Container class="javax.swing.JPanel" name="panelEmpleados">
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-        <Property name="columns" type="int" value="3"/>
-        <Property name="rows" type="int" value="0"/>
-      </Layout>
-    </Container>
     <Component class="javax.swing.JLabel" name="labAreas">
       <Properties>
         <Property name="text" type="java.lang.String" value="&#xc1;reas"/>
@@ -118,5 +106,31 @@
         <Property name="text" type="java.lang.String" value="Presupuesto asignado:  %"/>
       </Properties>
     </Component>
+    <Container class="javax.swing.JScrollPane" name="scrollPanelArea">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Container class="javax.swing.JPanel" name="panelArea">
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+            <Property name="columns" type="int" value="1"/>
+            <Property name="rows" type="int" value="0"/>
+          </Layout>
+        </Container>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JScrollPane" name="scrollPanelEmpleado">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Container class="javax.swing.JPanel" name="panelEmpleados">
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+            <Property name="columns" type="int" value="3"/>
+            <Property name="rows" type="int" value="0"/>
+          </Layout>
+        </Container>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>

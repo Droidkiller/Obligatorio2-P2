@@ -30,20 +30,18 @@ public class ReporteEstadoAreas extends javax.swing.JDialog {
     private void initComponents() {
 
         labTitulo = new javax.swing.JLabel();
-        panelArea = new javax.swing.JPanel();
-        panelEmpleados = new javax.swing.JPanel();
         labAreas = new javax.swing.JLabel();
         labSel = new javax.swing.JLabel();
         labAreaSel = new javax.swing.JLabel();
         labPor = new javax.swing.JLabel();
+        scrollPanelArea = new javax.swing.JScrollPane();
+        panelArea = new javax.swing.JPanel();
+        scrollPanelEmpleado = new javax.swing.JScrollPane();
+        panelEmpleados = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         labTitulo.setText("Estado de áreas");
-
-        panelArea.setLayout(new java.awt.GridLayout(0, 1));
-
-        panelEmpleados.setLayout(new java.awt.GridLayout(0, 3));
 
         labAreas.setText("Áreas");
 
@@ -52,6 +50,12 @@ public class ReporteEstadoAreas extends javax.swing.JDialog {
         labAreaSel.setText("Área seleccionada: ");
 
         labPor.setText("Presupuesto asignado:  %");
+
+        panelArea.setLayout(new java.awt.GridLayout(0, 1));
+        scrollPanelArea.setViewportView(panelArea);
+
+        panelEmpleados.setLayout(new java.awt.GridLayout(0, 3));
+        scrollPanelEmpleado.setViewportView(panelEmpleados);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,19 +69,19 @@ public class ReporteEstadoAreas extends javax.swing.JDialog {
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labAreas, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(panelArea, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labSel)
-                            .addComponent(panelEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(labAreaSel)
                         .addGap(57, 57, 57)
                         .addComponent(labPor)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addContainerGap(86, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labAreas, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scrollPanelArea, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labSel)
+                            .addComponent(scrollPanelEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -89,13 +93,14 @@ public class ReporteEstadoAreas extends javax.swing.JDialog {
                     .addComponent(labSel)
                     .addComponent(labAreas))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panelArea, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
-                    .addComponent(panelEmpleados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labAreaSel)
-                    .addComponent(labPor))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(scrollPanelEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(labAreaSel)
+                            .addComponent(labPor)))
+                    .addComponent(scrollPanelArea, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(93, Short.MAX_VALUE))
         );
 
@@ -147,5 +152,7 @@ public class ReporteEstadoAreas extends javax.swing.JDialog {
     private javax.swing.JLabel labTitulo;
     private javax.swing.JPanel panelArea;
     private javax.swing.JPanel panelEmpleados;
+    private javax.swing.JScrollPane scrollPanelArea;
+    private javax.swing.JScrollPane scrollPanelEmpleado;
     // End of variables declaration//GEN-END:variables
 }
