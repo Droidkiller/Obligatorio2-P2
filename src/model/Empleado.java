@@ -42,7 +42,7 @@ public class Empleado {
     private void setManager(Manager manager) {this.manager = manager;}
 
     public Area getArea() {return area;}
-    private void setArea(Area area) {this.area = area;}
+    public void setArea(Area area) {this.area = area;}
 
 
     

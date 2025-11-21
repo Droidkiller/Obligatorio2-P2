@@ -46,13 +46,35 @@ public class Sistema {
         managers.remove(man);
     }
     
-    public void agregarArea(Area a){
-        areas.add(a);
-    } 
-    public void quitarArea(Area a){
-        areas.remove(a);
+    public void crearArea(String nombre, String descripcion, double presupuesto) throws Exception {
+        for (Area a : areas) {
+            if (a.getNombre().equalsIgnoreCase(nombre)) {
+                throw new Exception("Ya existe un área con ese nombre.");
+            }
+        }
+        Area nueva = new Area(nombre, descripcion, presupuesto);
+        areas.add(nueva);
+        notificarObservers();
     }
-     
+    
+    public void eliminarArea(Area a) {
+        areas.remove(a);
+        notificarObservers();
+    }
+    
+    public void modificarDescripcionArea(Area a, String nuevaDescripcion) {
+        a.setDescripcion(nuevaDescripcion);
+        notificarObservers();
+    }
+    public void moverEmpleado(Empleado e, Area origen, Area destino, int mesInicio) throws Exception {
+        if (!puedeMoverEmpleado(e, destino, mesInicio)) {
+            throw new Exception("No hay presupuesto suficiente en el área de destino.");
+        }
+        origen.reintegrarPresupuesto(e, mesInicio);
+        destino.asignarEmpleado(e, mesInicio);
+        e.setArea(destino);
+        notificarObservers();
+    }
     public void registrarMovimiento(Movimiento m) {
         movimientos.add(m);
     }
@@ -126,6 +148,9 @@ public class Sistema {
         return existe;
     }
     
+    public boolean puedeMoverEmpleado(Empleado e, Area destino, int mesInicio) {
+        return destino.tienePresupuestoDisponible(e.getSalario(), mesInicio);
+    }
     public void agregarObserver(Observer obs) {
         observers.add(obs);
     }
