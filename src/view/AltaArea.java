@@ -178,6 +178,13 @@ public class AltaArea extends javax.swing.JDialog {
             }
         });
     }
+    
+    public javax.swing.JList<String> getListAreasReg() { return listAreasReg; }
+    public javax.swing.JTextField getTextNom() { return textNom; }
+    public javax.swing.JTextArea getTextDescr() { return textDescr; }
+    public javax.swing.JTextField getTextPres() { return textPres; }
+    public javax.swing.JButton getBtnCrear() { return btnCrear; }
+    public javax.swing.JButton getBtnCerrar() { return btnCerrar; }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrar;

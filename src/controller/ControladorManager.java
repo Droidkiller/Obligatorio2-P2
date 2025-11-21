@@ -41,9 +41,12 @@ public class ControladorManager {
 
     private void abrirBajaManager() {
         BajaManager vistaBaja = new BajaManager(principal, true);
-        vistaBaja.getListManSinEmp().setListData(
-            sistema.getManagersSinEmpleados().stream().map(Manager::getNombre).toArray(String[]::new)
-        );
+        var managersSinEmp = sistema.getManagersSinEmpleados();
+        String[] nombres = new String[managersSinEmp.size()];
+        for (int i = 0; i < managersSinEmp.size(); i++) {
+            nombres[i] = managersSinEmp.get(i).getNombre();
+        }
+        vistaBaja.getListManSinEmp().setListData(nombres);
         vistaBaja.getBtnEliminar().addActionListener(e -> eliminarManager(vistaBaja));
         vistaBaja.getBtnCerrar().addActionListener(e -> {
             sistema.quitarObserver(vistaBaja);

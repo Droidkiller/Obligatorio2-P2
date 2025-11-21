@@ -260,7 +260,11 @@ public class ModificarManager extends javax.swing.JDialog implements Observer {
     public javax.swing.JButton getBtnGuardar() { return btnGuardar; }
     public javax.swing.JButton getBtnCerrar() { return btnCerrar; }
     public void setListaManagers(java.util.List<Manager> managers) {
-        listMan.setListData(managers.stream().map(Manager::getNombre).toArray(String[]::new));
+        String[] nombres = new String[managers.size()];
+        for (int i = 0; i < managers.size(); i++) {
+            nombres[i] = managers.get(i).getNombre();
+        }
+        listMan.setListData(nombres);
     }
     public void setNombre(String nombre) { textNom.setText(nombre); }
     public void setCedula(String cedula) { textCed.setText(cedula); }
