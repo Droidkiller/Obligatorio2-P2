@@ -1,14 +1,15 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ Aitana Alvarez 340201
+ Francisco Bonanni 299134
  */
 package view;
 
-/**
- *
- * @author Usuario
- */
-public class BajaManager extends javax.swing.JDialog {
+import javax.swing.DefaultListModel;
+import model.Manager;
+import model.Observer;
+import model.Sistema;
+
+public class BajaManager extends javax.swing.JDialog implements Observer {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BajaManager.class.getName());
 
@@ -142,6 +143,40 @@ public class BajaManager extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+    }
+    
+    public void setListaManagers(java.util.List<Manager> managers) {
+        DefaultListModel<String> model = new DefaultListModel<>();
+        for (Manager m : managers) {
+            model.addElement(m.getNombre());
+        }
+        listManSinEmp.setModel(model);
+    }
+    
+    public javax.swing.JList<String> getListManSinEmp() {
+        return listManSinEmp;
+    }
+    
+    public Manager getManagerSeleccionado(java.util.List<Manager> managers) {
+        int index = listManSinEmp.getSelectedIndex();
+        if (index >= 0 && index < managers.size()) {
+            return managers.get(index);
+        }
+        return null;
+    }
+
+    public javax.swing.JButton getBtnEliminar() {
+        return btEliminar;
+    }
+
+    public javax.swing.JButton getBtnCerrar() {
+        return btnCerrar;
+    }
+    
+    @Override
+    public void actualizar() {
+        var sistema = Sistema.getInstancia();
+        setListaManagers(sistema.getManagers());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

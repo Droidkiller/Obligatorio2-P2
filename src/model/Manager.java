@@ -40,5 +40,9 @@ public class Manager {
         empleados.add(emp);
     } 
    
+    @Override
+    public String toString() {
+        return nombre;
+    }
  
 }

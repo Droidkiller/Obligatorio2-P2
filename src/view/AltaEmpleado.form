@@ -154,9 +154,9 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="comboMan" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cmbManagers" min="-2" max="-2" attributes="0"/>
                                       <Component id="textSal" min="-2" pref="71" max="-2" attributes="0"/>
-                                      <Component id="comboArea" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cmbAreas" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -209,9 +209,9 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="textSal" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="comboMan" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmbManagers" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="comboArea" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmbAreas" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -296,7 +296,7 @@
         </Container>
         <Component class="javax.swing.JTextField" name="textSal">
         </Component>
-        <Component class="javax.swing.JComboBox" name="comboMan">
+        <Component class="javax.swing.JComboBox" name="cmbManagers">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="4">
@@ -308,10 +308,10 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JComboBox" name="comboArea">
+        <Component class="javax.swing.JComboBox" name="cmbAreas">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="4">
@@ -323,7 +323,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
           </AuxValues>
         </Component>
       </SubComponents>
