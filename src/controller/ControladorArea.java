@@ -13,7 +13,6 @@ import view.BajaArea;
 import view.ModificacionArea;
 import view.MovimientoArea;
 import javax.swing.*;
-import java.util.Comparator;
 import java.util.ArrayList;
 import javax.swing.event.ListSelectionListener;
 
@@ -46,7 +45,7 @@ public class ControladorArea {
             sistema.quitarObserver(vista);
             vista.dispose();
         });
-
+        vista.actualizar();
         vista.setVisible(true);
     }
     
@@ -111,7 +110,7 @@ public class ControladorArea {
             sistema.quitarObserver(vista);
             vista.dispose();
         });
-
+        vista.actualizar();
         vista.setVisible(true);
     }
     
@@ -153,17 +152,14 @@ public class ControladorArea {
         ModificacionArea vista = new ModificacionArea(principal, true);
         sistema.agregarObserver(vista);
         refrescarListaModificacion(vista);
-
-        // when user selects an area in the list, fill fields
         ListSelectionListener selListener = e -> cargarDatosAreaSeleccionada(vista);
         vista.getListAreas().addListSelectionListener(selListener);
-
         vista.getBtnGuardar().addActionListener(e -> guardarCambiosArea(vista));
         vista.getBtnCerrar().addActionListener(e -> {
             sistema.quitarObserver(vista);
             vista.dispose();
         });
-
+        vista.actualizar();
         vista.setVisible(true);
     }
 
@@ -211,27 +207,21 @@ public class ControladorArea {
     
     // Movimiento de área -----------------------------------------------------------------------------------------------
     private void abrirMovimientosArea() {
-        // You said you have a movement window; assume it's called RealizarMovimiento
         MovimientoArea vista = new MovimientoArea(principal, true);
         sistema.agregarObserver(vista);
-
-        // populate origin area combo
+        
         java.util.List<Area> lista = sistema.getAreas();
         String[] nombres = new String[lista.size()];
         for (int i = 0; i < lista.size(); i++) {
             nombres[i] = lista.get(i).getNombre();
         }
         vista.getCmbOrigen().setModel(new javax.swing.DefaultComboBoxModel<>(nombres));
-
-        // when origin changes, refresh employees list
         vista.getCmbOrigen().addActionListener(e -> refrescarEmpleadosParaOrigen(vista));
-
         vista.getBtnMover().addActionListener(e -> realizarMovimiento(vista));
         vista.getBtnCerrar().addActionListener(e -> {
             sistema.quitarObserver(vista);
             vista.dispose();
         });
-
         vista.setVisible(true);
     }
 
@@ -247,7 +237,6 @@ public class ControladorArea {
             }
             vista.getListEmpleados().setListData(nombres.toArray(new String[0]));
 
-            // populate destination areas (all except origin)
             java.util.List<Area> all = sistema.getAreas();
             java.util.List<String> dest = new ArrayList<>();
             for (Area aa : all) {
