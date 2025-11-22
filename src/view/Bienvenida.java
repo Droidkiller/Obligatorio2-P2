@@ -16,11 +16,12 @@ public class Bienvenida extends javax.swing.JFrame {
      * Creates new form Bienvenida
      */
     public Bienvenida() {
-        initComponents();
-        setLocationRelativeTo(null);   // centrar la ventana
-    setResizable(false);           // que no se pueda cambiar el tamaño
-
-    // Texto con nombres y cédulas en varias líneas
+    initComponents();
+    setSize(600, 400);
+    setLocationRelativeTo(null); 
+    setResizable(false);
+    
+    // Texto con nombres y cédulas
     labAutores.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     labAutores.setText(
         "<html><center>"
@@ -30,14 +31,23 @@ public class Bienvenida extends javax.swing.JFrame {
         + "</center></html>"
     );
 
-    // Timer: después de 4 segundos (entre 3 y 5) abre el menú de inicio
+   
+    javax.swing.ImageIcon original = new javax.swing.ImageIcon(
+        getClass().getResource("/resources/logo.png")
+    );
+    java.awt.Image img = original.getImage().getScaledInstance(
+        600, 350, java.awt.Image.SCALE_SMOOTH
+    );
+    icon.setIcon(new javax.swing.ImageIcon(img));
+
+   
     javax.swing.Timer timer = new javax.swing.Timer(4000, e -> {
-        dispose();                    // cierro la bienvenida
-        new MenuInicio().setVisible(true);  // abro ventana con 3 botones
+        dispose();                          // cierro la bienvenida
+        new MenuInicio().setVisible(true);  // abro ventana con 3 opciones
     });
     timer.setRepeats(false);
     timer.start();
-    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,46 +59,21 @@ public class Bienvenida extends javax.swing.JFrame {
     private void initComponents() {
 
         panelBienvenida = new javax.swing.JPanel();
-        labAutores = new javax.swing.JLabel();
         icon = new javax.swing.JLabel();
+        labAutores = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         panelBienvenida.setBackground(new java.awt.Color(204, 204, 255));
+        panelBienvenida.setLayout(new javax.swing.BoxLayout(panelBienvenida, javax.swing.BoxLayout.LINE_AXIS));
+        getContentPane().add(panelBienvenida, java.awt.BorderLayout.PAGE_START);
+
+        icon.setIcon(new javax.swing.ImageIcon("C:\\proyectos\\Obligatorio2-P2\\src\\resources\\logo.png")); // NOI18N
+        getContentPane().add(icon, java.awt.BorderLayout.CENTER);
 
         labAutores.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         labAutores.setText("Nombres: Aitana Alvarez - 340201 | Francisco Bonanni - 299134");
-
-        icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/logo.png"))); // NOI18N
-
-        javax.swing.GroupLayout panelBienvenidaLayout = new javax.swing.GroupLayout(panelBienvenida);
-        panelBienvenida.setLayout(panelBienvenidaLayout);
-        panelBienvenidaLayout.setHorizontalGroup(
-            panelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBienvenidaLayout.createSequentialGroup()
-                .addContainerGap(357, Short.MAX_VALUE)
-                .addComponent(labAutores)
-                .addGap(318, 318, 318))
-            .addGroup(panelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBienvenidaLayout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(icon)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
-        panelBienvenidaLayout.setVerticalGroup(
-            panelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBienvenidaLayout.createSequentialGroup()
-                .addContainerGap(630, Short.MAX_VALUE)
-                .addComponent(labAutores)
-                .addGap(43, 43, 43))
-            .addGroup(panelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBienvenidaLayout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(icon, javax.swing.GroupLayout.PREFERRED_SIZE, 677, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
-
-        getContentPane().add(panelBienvenida, java.awt.BorderLayout.CENTER);
+        getContentPane().add(labAutores, java.awt.BorderLayout.PAGE_END);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
