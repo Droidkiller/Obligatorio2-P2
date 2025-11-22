@@ -154,7 +154,7 @@ public class ControladorArea {
         sistema.agregarObserver(vista);
         refrescarListaModificacion(vista);
 
-        // when user selects an area in the list, fill fields
+        
         ListSelectionListener selListener = e -> cargarDatosAreaSeleccionada(vista);
         vista.getListAreas().addListSelectionListener(selListener);
 
@@ -211,11 +211,11 @@ public class ControladorArea {
     
     // Movimiento de área -----------------------------------------------------------------------------------------------
     private void abrirMovimientosArea() {
-        // You said you have a movement window; assume it's called RealizarMovimiento
+       
         MovimientoArea vista = new MovimientoArea(principal, true);
         sistema.agregarObserver(vista);
 
-        // populate origin area combo
+        
         java.util.List<Area> lista = sistema.getAreas();
         String[] nombres = new String[lista.size()];
         for (int i = 0; i < lista.size(); i++) {
@@ -223,7 +223,7 @@ public class ControladorArea {
         }
         vista.getCmbOrigen().setModel(new javax.swing.DefaultComboBoxModel<>(nombres));
 
-        // when origin changes, refresh employees list
+        
         vista.getCmbOrigen().addActionListener(e -> refrescarEmpleadosParaOrigen(vista));
 
         vista.getBtnMover().addActionListener(e -> realizarMovimiento(vista));
@@ -296,7 +296,7 @@ public class ControladorArea {
             if (aOrigen == null || aDestino == null || empleado == null) {
                 JOptionPane.showMessageDialog(vista, "Datos inválidos, reintente.");
             } else {
-                // check budget using sistema.puedeMoverEmpleado (or use Area.tienePresupuestoDisponible)
+                
                 boolean puede = sistema.puedeMoverEmpleado(empleado, aDestino, mesInicio);
                 if (!puede) {
                     JOptionPane.showMessageDialog(vista, "No hay presupuesto suficiente en el área destino.");

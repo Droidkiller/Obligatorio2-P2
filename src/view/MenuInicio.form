@@ -62,11 +62,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Sistema guardado"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSistGuardadoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnSistPre">
       <Properties>
         <Property name="text" type="java.lang.String" value="Sistema con datos precargados"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSistPreActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

@@ -149,7 +149,88 @@ public class Sistema {
         }
         return resultado;
     }
-    
+
+    public void iniciarSistemaVacio() {
+        areas.clear();
+        managers.clear();
+        empleados.clear();
+        movimientos.clear();
+        notificarObservers();
+    }
+
+    public void iniciarSistemaConDatosPrecargados() {
+
+        areas.clear();
+        managers.clear();
+        empleados.clear();
+        movimientos.clear();
+
+
+        Area personal = new Area(
+                "Personal",
+                "Reclutamiento de personal, promociones, gestión de cargos",
+                100000
+        );
+
+        Area rrhh = new Area(
+                "RRHH",
+                "Relacionamiento en la empresa, organigrama, gestión de equipos",
+                80000
+        );
+
+        Area seguridad = new Area(
+                "Seguridad",
+                "Seguridad física, vigilancia, seguridad informática, protocolos y políticas de seguridad",
+                120000
+        );
+
+        Area comunicaciones = new Area(
+                "Comunicaciones",
+                "Comunicaciones internas, reglas y protocolos, comunicaciones con proveedores y clientes",
+                20000
+        );
+
+        Area marketing = new Area(
+                "Marketing",
+                "Acciones planificadas, publicidad en medios masivos, publicidad en redes, gestión de redes",
+                95000
+        );
+
+        areas.add(personal);
+        areas.add(rrhh);
+        areas.add(seguridad);
+        areas.add(comunicaciones);
+        areas.add(marketing);
+
+        // Ana Martínez, ci 4.568.369-1, celular 099 123 456, antigüedad 10
+        Manager ana = new Manager("Ana Martínez", 45683691, 10, 99123456);
+
+        // Ricardo Morales, ci 3.214.589-3, celular 094 121 212, antigüedad 4
+        Manager ricardo = new Manager("Ricardo Morales", 32145893, 4, 94121212);
+
+        // Laura Torales, ci 3.589.257-5, celular 099 654 321, antigüedad 1
+        Manager laura = new Manager("Laura Torales", 35892575, 1, 99654321);
+
+        // Juan Pablo Zapata, ci 4.555.197-7, celular 099 202 020, antigüedad 5
+        Manager juanPablo = new Manager("Juan Pablo Zapata", 45551977, 5, 99202020);
+
+        managers.add(ana);
+        managers.add(ricardo);
+        managers.add(laura);
+        managers.add(juanPablo);
+
+
+        notificarObservers();
+    }
+
+    /**
+     * Iniciar el sistema con datos guardados en archivo.
+     */
+    public void iniciarSistemaGuardado() {
+
+    }
+
+
     private boolean existeCedula(int cedula) {
         boolean existe=false;
         for (int i=0;i<empleados.size() && !existe;i++) {
@@ -166,6 +247,7 @@ public class Sistema {
     public boolean puedeMoverEmpleado(Empleado e, Area destino, int mesInicio) {
         return destino.tienePresupuestoDisponible(e.getSalario(), mesInicio);
     }
+    
     public void agregarObserver(Observer obs) {
         observers.add(obs);
     }
