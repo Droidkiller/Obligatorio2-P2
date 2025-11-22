@@ -165,9 +165,16 @@ public class Principal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new Principal().setVisible(true));
     }
     
+    // Managers
     public javax.swing.JMenuItem getAltaMan() {return altaMan;}
     public javax.swing.JMenuItem getBajaMan() {return bajaMan;}
     public javax.swing.JMenuItem getModificacionMan() {return modificacionMan;}
+    
+    // Areas
+    public javax.swing.JMenuItem getAltaArea() { return altaArea; }
+    public javax.swing.JMenuItem getBajaArea() { return bajaArea; }
+    public javax.swing.JMenuItem getModifiacionArea() { return modifiacionArea; }
+    public javax.swing.JMenuItem getAreaMov() { return areaMov; }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem altaArea;

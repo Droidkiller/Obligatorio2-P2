@@ -1,14 +1,13 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ Aitana Alvarez 340201
+ Francisco Bonanni 299134
  */
 package view;
 
-/**
- *
- * @author Usuario
- */
-public class AltaArea extends javax.swing.JDialog {
+import model.Observer;
+import model.Sistema;
+
+public class AltaArea extends javax.swing.JDialog implements Observer {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AltaArea.class.getName());
 
@@ -185,6 +184,11 @@ public class AltaArea extends javax.swing.JDialog {
     public javax.swing.JTextField getTextPres() { return textPres; }
     public javax.swing.JButton getBtnCrear() { return btnCrear; }
     public javax.swing.JButton getBtnCerrar() { return btnCerrar; }
+    
+    @Override
+    public void actualizar() {
+        var sistema = Sistema.getInstancia();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrar;

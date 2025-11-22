@@ -4,21 +4,41 @@
  */
 package view;
 
-/**
- *
- * @author Usuario
- */
-public class ReporteEstadoAreas extends javax.swing.JDialog {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ReporteEstadoAreas.class.getName());
+import java.awt.Color;
+import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
-    /**
-     * Creates new form ReporteEstadoAreas
-     */
-    public ReporteEstadoAreas(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-    }
+import model.Area;
+import model.Empleado;
+import model.Sistema;
+import model.Observer;
+
+public class ReporteEstadoAreas extends javax.swing.JDialog implements Observer {
+    
+    private final Sistema sistema = Sistema.getInstancia();
+    private List<Area> areasOrdenadas = new ArrayList<>();
+
+
+   public ReporteEstadoAreas(java.awt.Frame parent, boolean modal) {
+    super(parent, modal);
+    initComponents();
+    
+    sistema.agregarObserver(this);
+
+    panelArea.setLayout(new java.awt.GridLayout(0, 1, 5, 5));
+    panelEmpleados.setLayout(new java.awt.GridLayout(0, 3, 5, 5));
+
+    refrescar();
+}
+@Override
+public void actualizar() {
+    refrescar();
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -111,39 +131,165 @@ public class ReporteEstadoAreas extends javax.swing.JDialog {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+        java.awt.EventQueue.invokeLater(() -> {
+            ReporteEstadoAreas dialog = new ReporteEstadoAreas(new javax.swing.JFrame(), true);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    System.exit(0);
                 }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                ReporteEstadoAreas dialog = new ReporteEstadoAreas(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
+            });
+            dialog.setVisible(true);
         });
+
+    }
+    private void refrescar() {
+        cargarAreas();
+        limpiarEmpleados();
+        labAreaSel.setText("Área seleccionada: ");
+        labPor.setText("Presupuesto asignado:  %");
     }
 
+    private void limpiarEmpleados() {
+        panelEmpleados.removeAll();
+        panelEmpleados.revalidate();
+        panelEmpleados.repaint();
+    }
+
+ private void cargarAreas() {
+        panelArea.removeAll();
+
+        areasOrdenadas = new ArrayList<>(sistema.getAreas());
+
+        // ordenar por porcentaje de presupuesto anual asignado, de mayor a menor
+        Collections.sort(areasOrdenadas, new Comparator<Area>() {
+            @Override
+            public int compare(Area a1, Area a2) {
+                return Double.compare(porcentajeAsignado(a2), porcentajeAsignado(a1));
+            }
+        });
+
+        for (Area area : areasOrdenadas) {
+            JButton btn = new JButton(area.getNombre());
+            btn.setMargin(new Insets(-5, -5, -5, -5));
+
+            double p = porcentajeAsignado(area); 
+
+            if (p > 0.90) {
+                btn.setBackground(Color.RED);
+            } else if (p >= 0.70) {
+                btn.setBackground(Color.YELLOW);
+            } else {
+                btn.setBackground(Color.LIGHT_GRAY);
+            }
+            btn.setOpaque(true);
+            btn.setBorderPainted(false);
+
+            btn.addActionListener(e -> seleccionarArea(area));
+
+            panelArea.add(btn);
+        }
+
+        panelArea.revalidate();
+        panelArea.repaint();
+    }
+
+    private double porcentajeAsignado(Area area) {
+        double totalSueldosAnuales = 0;
+
+        // suma de salarios anuales de los empleados del área
+        for (Empleado e : area.getEmpleados()) {
+            totalSueldosAnuales += e.getSalario() * 12;
+        }
+
+        if (area.getPresupuesto() == 0) {
+            return 0;
+        }
+        return totalSueldosAnuales / area.getPresupuesto(); 
+    }
+    
+    private void seleccionarArea(Area area) {
+        double porcentajeAsignadoArea = porcentajeAsignado(area);
+
+        labAreaSel.setText("Área seleccionada: " + area.getNombre());
+        labPor.setText(String.format("Presupuesto asignado: %.0f%%", porcentajeAsignadoArea * 100));
+
+        cargarEmpleados(area);
+        
+    }
+
+    
+ private void cargarEmpleados(Area area) {
+    panelEmpleados.removeAll();
+
+    ArrayList<Empleado> lista = new ArrayList<>(area.getEmpleados());
+    Collections.sort(lista, Comparator.comparing(Empleado::getNombre));
+
+    if (lista.isEmpty()) {
+        panelEmpleados.revalidate();
+        panelEmpleados.repaint();
+        return;
+    }
+
+    double min = Double.MAX_VALUE;
+    double max = Double.MIN_VALUE;
+    for (Empleado e : lista) {
+        double s = e.getSalario();
+        if (s < min) min = s;
+        if (s > max) max = s;
+    }
+
+    for (Empleado emp : lista) {
+        JButton btn = new JButton(emp.getNombre());
+       
+        btn.setMargin(new Insets(-5, -5, -5, -5));
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+        btn.setOpaque(true);
+        btn.setForeground(Color.WHITE);
+
+        double salario = emp.getSalario();
+        btn.setBackground(colorEscalaAzul(salario, min, max));
+
+        btn.addActionListener(e -> mostrarEmpleado(emp));
+
+        panelEmpleados.add(btn);
+    }
+
+    panelEmpleados.revalidate();
+    panelEmpleados.repaint();
+}
+
+
+    private Color colorEscalaAzul(double salario, double min, double max) {
+        if (max <= min) {
+            return Color.BLACK;
+        }
+        double t = (salario - min) / (max - min); 
+        int r = 0;
+        int g = 0;
+        int b = (int) Math.round(255 * t);
+        return new Color(r, g, b);
+    }
+
+    private void mostrarEmpleado(Empleado e) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Nombre: ").append(e.getNombre()).append("\n");
+        sb.append("Cédula: ").append(e.getCedula()).append("\n");
+        sb.append("Celular: ").append(e.getCelular()).append("\n");
+        sb.append("Salario mensual: ").append(e.getSalario()).append("\n");
+        sb.append("Manager: ").append(e.getManager().getNombre()).append("\n");
+        sb.append("Área: ").append(e.getArea().getNombre()).append("\n");
+
+        JOptionPane.showMessageDialog(
+                this,
+                sb.toString(),
+                "Información del empleado",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+    
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel labAreaSel;
     private javax.swing.JLabel labAreas;

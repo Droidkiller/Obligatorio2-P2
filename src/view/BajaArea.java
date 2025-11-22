@@ -1,14 +1,13 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ Aitana Alvarez 340201
+ Francisco Bonanni 299134
  */
 package view;
 
-/**
- *
- * @author Usuario
- */
-public class BajaArea extends javax.swing.JDialog {
+import model.Observer;
+import model.Sistema;
+
+public class BajaArea extends javax.swing.JDialog implements Observer {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BajaArea.class.getName());
 
@@ -132,6 +131,15 @@ public class BajaArea extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+    }
+    
+    public javax.swing.JList<String> getListSinEmpl() {return listSinEmpl;}
+    public javax.swing.JButton getBtnEliminar() {return btnEliminar;}
+    public javax.swing.JButton getBtnCerrar() {return btnCerrar;}
+    
+    @Override
+    public void actualizar() {
+        var sistema = Sistema.getInstancia();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

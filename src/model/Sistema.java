@@ -57,6 +57,21 @@ public class Sistema {
         notificarObservers();
     }
     
+    public Area buscarAreaPorNombre(String nombre) {
+        Area resultado = null;
+        boolean encontrado = false;
+
+        for (int i = 0; i < areas.size() && !encontrado; i++) {
+            Area a = areas.get(i);
+            if (a.getNombre().equalsIgnoreCase(nombre)) {
+                resultado = a;
+                encontrado = true;
+            }
+        }
+
+        return resultado;
+    }
+    
     public void eliminarArea(Area a) {
         areas.remove(a);
         notificarObservers();

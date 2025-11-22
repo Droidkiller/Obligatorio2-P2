@@ -1,14 +1,13 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ Aitana Alvarez 340201
+ Francisco Bonanni 299134
  */
 package view;
 
-/**
- *
- * @author Usuario
- */
-public class MovimientoArea extends javax.swing.JDialog {
+import model.Observer;
+import model.Sistema;
+
+public class MovimientoArea extends javax.swing.JDialog implements Observer {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MovimientoArea.class.getName());
 
@@ -179,6 +178,19 @@ public class MovimientoArea extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+    }
+    
+    public javax.swing.JComboBox<String> getCmbOrigen() {return boxOrigen;}
+    public javax.swing.JComboBox<String> getCmbDestino() {return boxDestino;}
+    public javax.swing.JComboBox<String> getCmbMes() {return boxMes;}
+    public javax.swing.JList<String> getListEmpleados() {return listEmpleadosOrigen;}
+    public javax.swing.JButton getBtnMover() {return btnMover;}
+    public javax.swing.JButton getBtnCerrar() {return btnCerrar;}
+    public javax.swing.JLabel getInfoPresup() {return infoPresup;}
+    
+    @Override
+    public void actualizar() {
+        var sistema = Sistema.getInstancia();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
