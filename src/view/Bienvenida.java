@@ -16,8 +16,38 @@ public class Bienvenida extends javax.swing.JFrame {
      * Creates new form Bienvenida
      */
     public Bienvenida() {
-        initComponents();
-    }
+    initComponents();
+    setSize(600, 400);
+    setLocationRelativeTo(null); 
+    setResizable(false);
+    
+    // Texto con nombres y cédulas
+    labAutores.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    labAutores.setText(
+        "<html><center>"
+        + "ERP con IA<br>"
+        + "Aitana Alvarez - 340201<br>"
+        + "Francisco Bonanni - 299134"
+        + "</center></html>"
+    );
+
+   
+    javax.swing.ImageIcon original = new javax.swing.ImageIcon(
+        getClass().getResource("/resources/logo.png")
+    );
+    java.awt.Image img = original.getImage().getScaledInstance(
+        600, 350, java.awt.Image.SCALE_SMOOTH
+    );
+    icon.setIcon(new javax.swing.ImageIcon(img));
+
+   
+    javax.swing.Timer timer = new javax.swing.Timer(4000, e -> {
+        dispose();                          // cierro la bienvenida
+        new MenuInicio().setVisible(true);  // abro ventana con 3 opciones
+    });
+    timer.setRepeats(false);
+    timer.start();
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,30 +59,21 @@ public class Bienvenida extends javax.swing.JFrame {
     private void initComponents() {
 
         panelBienvenida = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        icon = new javax.swing.JLabel();
+        labAutores = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Nombres: Aitana Alvarez - 340201 | Francisco Bonanni - 299134");
+        panelBienvenida.setBackground(new java.awt.Color(204, 204, 255));
+        panelBienvenida.setLayout(new javax.swing.BoxLayout(panelBienvenida, javax.swing.BoxLayout.LINE_AXIS));
+        getContentPane().add(panelBienvenida, java.awt.BorderLayout.PAGE_START);
 
-        javax.swing.GroupLayout panelBienvenidaLayout = new javax.swing.GroupLayout(panelBienvenida);
-        panelBienvenida.setLayout(panelBienvenidaLayout);
-        panelBienvenidaLayout.setHorizontalGroup(
-            panelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBienvenidaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(60, Short.MAX_VALUE))
-        );
-        panelBienvenidaLayout.setVerticalGroup(
-            panelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBienvenidaLayout.createSequentialGroup()
-                .addGap(130, 130, 130)
-                .addComponent(jLabel1)
-                .addContainerGap(154, Short.MAX_VALUE))
-        );
+        icon.setIcon(new javax.swing.ImageIcon("C:\\proyectos\\Obligatorio2-P2\\src\\resources\\logo.png")); // NOI18N
+        getContentPane().add(icon, java.awt.BorderLayout.CENTER);
 
-        getContentPane().add(panelBienvenida, java.awt.BorderLayout.CENTER);
+        labAutores.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        labAutores.setText("Nombres: Aitana Alvarez - 340201 | Francisco Bonanni - 299134");
+        getContentPane().add(labAutores, java.awt.BorderLayout.PAGE_END);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -83,7 +104,8 @@ public class Bienvenida extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel icon;
+    private javax.swing.JLabel labAutores;
     private javax.swing.JPanel panelBienvenida;
     // End of variables declaration//GEN-END:variables
 }
