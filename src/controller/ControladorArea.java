@@ -294,7 +294,7 @@ public class ControladorArea {
                         sistema.moverEmpleado(empleado, aOrigen, aDestino, mesInicio);
                         sistema.notificarObservers();
                         JOptionPane.showMessageDialog(vista, "Movimiento realizado.");
-                        refrescarEmpleadosParaOrigen(vista); // update lists
+                        refrescarEmpleadosParaOrigen(vista); 
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(vista, ex.getMessage());
                     }
