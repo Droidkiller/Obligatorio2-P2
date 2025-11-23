@@ -16,38 +16,38 @@ public class Bienvenida extends javax.swing.JFrame {
      * Creates new form Bienvenida
      */
     public Bienvenida() {
-    initComponents();
-    setSize(600, 400);
-    setLocationRelativeTo(null); 
-    setResizable(false);
-    
-    // Texto con nombres y cédulas
-    labAutores.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    labAutores.setText(
-        "<html><center>"
-        + "ERP con IA<br>"
-        + "Aitana Alvarez - 340201<br>"
-        + "Francisco Bonanni - 299134"
-        + "</center></html>"
-    );
+        initComponents();
+        setSize(600, 400);
+        setLocationRelativeTo(null); 
+        setResizable(false);
 
-   
-    javax.swing.ImageIcon original = new javax.swing.ImageIcon(
-        getClass().getResource("/resources/logo.png")
-    );
-    java.awt.Image img = original.getImage().getScaledInstance(
-        600, 350, java.awt.Image.SCALE_SMOOTH
-    );
-    icon.setIcon(new javax.swing.ImageIcon(img));
+        // Texto con nombres y cédulas
+        labAutores.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labAutores.setText(
+            "<html><center>"
+            + "ERP con IA<br>"
+            + "Aitana Alvarez - 340201<br>"
+            + "Francisco Bonanni - 299134"
+            + "</center></html>"
+        );
 
-   
-    javax.swing.Timer timer = new javax.swing.Timer(4000, e -> {
-        dispose();                          // cierro la bienvenida
-        new MenuInicio().setVisible(true);  // abro ventana con 3 opciones
-    });
-    timer.setRepeats(false);
-    timer.start();
-}
+
+        javax.swing.ImageIcon original = new javax.swing.ImageIcon(
+            getClass().getResource("/resources/logo.png")
+        );
+        java.awt.Image img = original.getImage().getScaledInstance(
+            600, 350, java.awt.Image.SCALE_SMOOTH
+        );
+        icon.setIcon(new javax.swing.ImageIcon(img));
+
+
+        javax.swing.Timer timer = new javax.swing.Timer(4000, e -> {
+            dispose();                          // cierro la bienvenida
+            new MenuInicio().setVisible(true);  // abro ventana con 3 opciones
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

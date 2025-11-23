@@ -1,10 +1,9 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ Aitana Alvarez 340201
+ Francisco Bonanni 299134
  */
 package view;
 
-import javax.swing.JOptionPane;
 import model.Sistema;
 
 /**
@@ -15,7 +14,7 @@ public class MenuInicio extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuInicio.class.getName());
     
-     private final Sistema sistema = Sistema.getInstancia();
+    private final Sistema sistema = Sistema.getInstancia();
 
     /**
      * Creates new form MenuInicio
@@ -89,18 +88,13 @@ public class MenuInicio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSistNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSistNuevoActionPerformed
-        Principal principal = new Principal();
-        principal.setVisible(true);
-        this.dispose();
+        sistema.iniciarSistemaVacio();
+        abrirMenuPrincipal();
     }//GEN-LAST:event_btnSistNuevoActionPerformed
 
     private void btnSistGuardadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSistGuardadoActionPerformed
-        JOptionPane.showMessageDialog(
-            this,
-            "La carga de sistema guardado aún no está implementada.",
-            "Información",
-            JOptionPane.INFORMATION_MESSAGE
-        );
+        sistema.iniciarSistemaGuardado();
+        abrirMenuPrincipal();
     }//GEN-LAST:event_btnSistGuardadoActionPerformed
 
     private void btnSistPreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSistPreActionPerformed
@@ -110,12 +104,9 @@ public class MenuInicio extends javax.swing.JFrame {
                                                       
 
     private void abrirMenuPrincipal() {
-        JOptionPane.showMessageDialog(
-            this,
-            "Acá se abriría el Menú Principal.",
-            "Menú principal",
-            JOptionPane.INFORMATION_MESSAGE
-        );
+        Principal p = new Principal();
+        p.setVisible(true);
+        this.dispose();
     }
 
     /**
