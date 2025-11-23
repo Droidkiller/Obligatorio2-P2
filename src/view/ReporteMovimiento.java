@@ -1,14 +1,18 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ Aitana Alvarez 340201
+ Francisco Bonanni 299134
  */
 package view;
 
-/**
- *
- * @author Usuario
- */
-public class ReporteMovimiento extends javax.swing.JDialog {
+import model.Observer;
+import model.Sistema;
+import model.Movimiento;
+import model.Area;
+import model.Empleado;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
+public class ReporteMovimiento extends javax.swing.JDialog implements Observer {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ReporteMovimiento.class.getName());
 
@@ -210,6 +214,75 @@ public class ReporteMovimiento extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+    }
+    public javax.swing.JButton getBtnFiltrar() {return btnFiltrar;}
+    public javax.swing.JButton getBtnExportar() {return btnExportar;}
+    public javax.swing.JButton getBtnCerrar() {return btnCerrar;}
+    
+    public String getSelectedMes() {
+        return (String) textMes.getSelectedItem();
+    }
+
+    public String getSelectedArea() {
+        return (String) textArea.getSelectedItem();
+    }
+
+    public String getSelectedEmpleado() {
+        return (String) textEmp.getSelectedItem();
+    }
+    
+    @Override
+    public void actualizar() {
+        Sistema sis = Sistema.getInstancia();
+
+        if (textMes.getItemCount() == 0) {
+            textMes.addItem("Todos");
+            for (int m = 1; m <= 12; m++) {
+                textMes.addItem(String.valueOf(m));
+            }
+        }
+
+        String selectedArea = (String) textArea.getSelectedItem();
+        textArea.removeAllItems();
+        textArea.addItem("Todos");
+        for (Area a : sis.getAreas()) {
+            textArea.addItem(a.getNombre());
+        }
+        if (selectedArea != null) {
+            textArea.setSelectedItem(selectedArea);
+        }
+
+        String selectedEmp = (String) textEmp.getSelectedItem();
+        textEmp.removeAllItems();
+        textEmp.addItem("Todos");
+        for (Empleado e : sis.getEmpleados()) {
+            textEmp.addItem(e.getNombre());
+        }
+        if (selectedEmp != null) {
+            textEmp.setSelectedItem(selectedEmp);
+        }
+
+        // ---- Cargar tabla completa (sin filtros) ----
+        cargarTabla(sis.getMovimientos());
+    }
+    
+    public void cargarTabla(ArrayList<Movimiento> lista) {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Mes");
+        model.addColumn("Área origen");
+        model.addColumn("Área destino");
+        model.addColumn("Empleado");
+
+        for (Movimiento m : lista) {
+            model.addRow(new Object[]{
+                m.getMes(),
+                m.getAreaOrigen().getNombre(),
+                m.getAreaDestino().getNombre(),
+                m.getEmployee().getNombre()
+            });
+        }
+
+        tablaMov.setModel(model);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -285,7 +285,7 @@ public class ControladorArea {
             if (aOrigen == null || aDestino == null || empleado == null) {
                 JOptionPane.showMessageDialog(vista, "Datos inválidos, reintente.");
             } else {
-                // check budget using sistema.puedeMoverEmpleado (or use Area.tienePresupuestoDisponible)
+                
                 boolean puede = sistema.puedeMoverEmpleado(empleado, aDestino, mesInicio);
                 if (!puede) {
                     JOptionPane.showMessageDialog(vista, "No hay presupuesto suficiente en el área destino.");

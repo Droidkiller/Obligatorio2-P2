@@ -187,7 +187,15 @@ public class AltaArea extends javax.swing.JDialog implements Observer {
     
     @Override
     public void actualizar() {
-        var sistema = Sistema.getInstancia();
+        Sistema sistema = Sistema.getInstancia();
+        var areas = sistema.getAreas();
+
+        String[] nombres = new String[areas.size()];
+        for (int i = 0; i < areas.size(); i++) {
+            nombres[i] = areas.get(i).getNombre();
+        }
+
+        listAreasReg.setListData(nombres);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

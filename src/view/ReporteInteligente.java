@@ -1,14 +1,17 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ Aitana Alvarez 340201
+ Francisco Bonanni 299134
  */
 package view;
 
-/**
- *
- * @author Usuario
- */
-public class ReporteInteligente extends javax.swing.JDialog {
+import model.Sistema;
+import model.Observer;
+import model.Empleado;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+
+public class ReporteInteligente extends javax.swing.JDialog implements Observer {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ReporteInteligente.class.getName());
 
@@ -64,8 +67,6 @@ public class ReporteInteligente extends javax.swing.JDialog {
 
         boxDestino.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        labIcono.setText("reloj");
-
         btnGenerar.setText("Generar reporte");
 
         labResultado.setText("Resultado:");
@@ -80,29 +81,6 @@ public class ReporteInteligente extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(139, 139, 139)
-                .addComponent(labTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(labIcono, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(61, 61, 61))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labResultado)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(labArea, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boxOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boxEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boxDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
@@ -114,26 +92,52 @@ public class ReporteInteligente extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnCerrar)
                 .addGap(28, 28, 28))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(139, 139, 139)
+                        .addComponent(labTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(labResultado)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(labIcono, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(labArea, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(boxOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(boxEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(boxDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labTitulo)
-                    .addComponent(labIcono))
+                .addComponent(labTitulo)
                 .addGap(5, 5, 5)
                 .addComponent(btnGenerar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labArea)
-                    .addComponent(boxOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(boxEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(boxDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(labResultado)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(labArea)
+                            .addComponent(boxOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(boxEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
+                            .addComponent(boxDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(labResultado))
+                    .addComponent(labIcono, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -183,6 +187,99 @@ public class ReporteInteligente extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+    }
+    
+    public javax.swing.JComboBox<String> getBoxOrigen() { return boxOrigen; }
+    public javax.swing.JComboBox<String> getBoxDestino() { return boxDestino; }
+    public javax.swing.JComboBox<String> getBoxEmpleado() { return boxEmpleado; }
+    public javax.swing.JButton getBtnGenerar() { return btnGenerar; }
+    public javax.swing.JButton getBtnCerrar() { return btnCerrar; }
+    public javax.swing.JTextArea getTextResult() { return textResult; }
+    public javax.swing.JLabel getLabIcono() { return labIcono; }
+    
+    public void mostrarResultado(String texto) {
+        textResult.setText(texto);
+    }
+    
+    public void setIconoCargando() {
+        labIcono.setIcon(new ImageIcon(getClass().getResource("/resources/icono-cargando.gif")));
+    }
+
+    public void setIconoExito() {
+        labIcono.setIcon(new ImageIcon(getClass().getResource("/resources/icono-exito.png")));
+    }
+
+    public void setIconoError() {
+        labIcono.setIcon(new ImageIcon(getClass().getResource("/resources/icono-error.png")));
+    }
+
+    public void cargarEmpleadosSegunOrigen() {
+        var sistema = Sistema.getInstancia();
+        String nombreArea = (String) boxOrigen.getSelectedItem();
+
+        if (nombreArea != null) {
+            var empleados = sistema.getEmpleadosEnArea(nombreArea);
+
+            String[] nombres = new String[empleados.size()];
+            for (int i = 0; i < empleados.size(); i++) {
+                nombres[i] = empleados.get(i).getNombre();
+            }
+
+            boxEmpleado.setModel(new javax.swing.DefaultComboBoxModel<>(nombres));
+        } else {
+            boxEmpleado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[0]));
+        }
+    }
+    
+    @Override
+    public void actualizar() {
+        Sistema sistema = Sistema.getInstancia();
+
+        // --- reload areas ---
+        var areas = sistema.getAreas();
+
+        String selectedOrigen = (String) boxOrigen.getSelectedItem();
+        String selectedDestino = (String) boxDestino.getSelectedItem();
+        String selectedEmpleado = (String) boxEmpleado.getSelectedItem();
+
+        // build area names
+        String[] nombresAreas = new String[areas.size()];
+        for (int i = 0; i < areas.size(); i++) {
+            nombresAreas[i] = areas.get(i).getNombre();
+        }
+
+        boxOrigen.setModel(new DefaultComboBoxModel<>(nombresAreas));
+        boxDestino.setModel(new DefaultComboBoxModel<>(nombresAreas));
+
+        // try to restore previous selections if still valid
+        if (selectedOrigen != null) {
+            boxOrigen.setSelectedItem(selectedOrigen);
+        }
+        if (selectedDestino != null) {
+            boxDestino.setSelectedItem(selectedDestino);
+        }
+
+        // --- reload employees based on selected origin area ---
+        String origenActual = (String) boxOrigen.getSelectedItem();
+        ArrayList<Empleado> empleadosFiltrados = new ArrayList<>();
+
+        for (Empleado e : sistema.getEmpleados()) {
+            if (e.getArea() != null && e.getArea().getNombre().equals(origenActual)) {
+                empleadosFiltrados.add(e);
+            }
+        }
+
+        String[] nombresEmpleados = new String[empleadosFiltrados.size()];
+        for (int i = 0; i < empleadosFiltrados.size(); i++) {
+            nombresEmpleados[i] = empleadosFiltrados.get(i).getNombre();
+        }
+
+        boxEmpleado.setModel(new DefaultComboBoxModel<>(nombresEmpleados));
+
+        // restore selected employee if still available
+        if (selectedEmpleado != null) {
+            boxEmpleado.setSelectedItem(selectedEmpleado);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

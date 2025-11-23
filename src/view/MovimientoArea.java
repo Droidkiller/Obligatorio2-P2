@@ -190,7 +190,48 @@ public class MovimientoArea extends javax.swing.JDialog implements Observer {
     
     @Override
     public void actualizar() {
-        var sistema = Sistema.getInstancia();
+        Sistema sistema = Sistema.getInstancia();
+        var modeloOrigen = new javax.swing.DefaultComboBoxModel<String>();
+        var modeloDestino = new javax.swing.DefaultComboBoxModel<String>();
+
+        for (var area : sistema.getAreas()) {
+            modeloOrigen.addElement(area.getNombre());
+            modeloDestino.addElement(area.getNombre());
+        }
+
+        String seleccionadoOrigen = (String) boxOrigen.getSelectedItem();
+        String seleccionadoDestino = (String) boxDestino.getSelectedItem();
+
+        boxOrigen.setModel(modeloOrigen);
+        boxDestino.setModel(modeloDestino);
+
+        if (seleccionadoOrigen != null) boxOrigen.setSelectedItem(seleccionadoOrigen);
+        if (seleccionadoDestino != null) boxDestino.setSelectedItem(seleccionadoDestino);
+
+        String origen = (String) boxOrigen.getSelectedItem();
+        var modeloEmps = new javax.swing.DefaultListModel<String>();
+
+        if (origen != null) {
+            var areaOrigen = sistema.buscarAreaPorNombre(origen);
+            if (areaOrigen != null) {
+                for (var emp : areaOrigen.getEmpleados()) {
+                    modeloEmps.addElement(emp.getNombre());
+                }
+            }
+        }
+
+        listEmpleadosOrigen.setModel(modeloEmps);
+
+        if (origen != null) {
+            var areaOrigen = sistema.buscarAreaPorNombre(origen);
+            if (areaOrigen != null) {
+                infoPresup.setText("Presupuesto: " + areaOrigen.getPresupuesto());
+            } else {
+                infoPresup.setText("Presupuesto: -");
+            }
+        } else {
+            infoPresup.setText("Presupuesto: -");
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

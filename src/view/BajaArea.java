@@ -6,6 +6,7 @@ package view;
 
 import model.Observer;
 import model.Sistema;
+import javax.swing.DefaultListModel;
 
 public class BajaArea extends javax.swing.JDialog implements Observer {
     
@@ -139,7 +140,16 @@ public class BajaArea extends javax.swing.JDialog implements Observer {
     
     @Override
     public void actualizar() {
-        var sistema = Sistema.getInstancia();
+        Sistema sistema = Sistema.getInstancia();
+        var modelo = new DefaultListModel<String>();
+
+        for (var area : sistema.getAreas()) {
+            if (area.getEmpleados().isEmpty()) {
+                modelo.addElement(area.getNombre());
+            }
+        }
+
+        listSinEmpl.setModel(modelo);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

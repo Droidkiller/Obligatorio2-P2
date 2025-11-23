@@ -6,6 +6,7 @@ package view;
 
 import model.Observer;
 import model.Sistema;
+import javax.swing.DefaultListModel;
 
 public class ModificacionArea extends javax.swing.JDialog implements Observer {
     
@@ -221,7 +222,26 @@ public class ModificacionArea extends javax.swing.JDialog implements Observer {
     
     @Override
     public void actualizar() {
-        var sistema = Sistema.getInstancia();
+        Sistema sistema = Sistema.getInstancia();
+        var modelo = new DefaultListModel<String>();
+        for (var area : sistema.getAreas()) {
+            modelo.addElement(area.getNombre());
+        }
+        listAreas.setModel(modelo);
+
+        String seleccionado = listAreas.getSelectedValue();
+        if (seleccionado != null) {
+            var area = sistema.buscarAreaPorNombre(seleccionado);
+            if (area != null) {
+                textNom.setText(area.getNombre());
+                textDescr.setText(area.getDescripcion());
+                textPres.setText(String.valueOf(area.getPresupuesto()));
+            } else {
+                textNom.setText("");
+                textDescr.setText("");
+                textPres.setText("");
+            }
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

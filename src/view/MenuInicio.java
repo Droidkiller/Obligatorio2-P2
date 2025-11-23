@@ -4,6 +4,9 @@
  */
 package view;
 
+import javax.swing.JOptionPane;
+import model.Sistema;
+
 /**
  *
  * @author Usuario
@@ -11,6 +14,8 @@ package view;
 public class MenuInicio extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuInicio.class.getName());
+    
+     private final Sistema sistema = Sistema.getInstancia();
 
     /**
      * Creates new form MenuInicio
@@ -43,8 +48,18 @@ public class MenuInicio extends javax.swing.JFrame {
         });
 
         btnSistGuardado.setText("Sistema guardado");
+        btnSistGuardado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSistGuardadoActionPerformed(evt);
+            }
+        });
 
         btnSistPre.setText("Sistema con datos precargados");
+        btnSistPre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSistPreActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -74,8 +89,33 @@ public class MenuInicio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSistNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSistNuevoActionPerformed
-        // TODO add your handling code here:
+        sistema.iniciarSistemaVacio();
+        abrirMenuPrincipal();
     }//GEN-LAST:event_btnSistNuevoActionPerformed
+
+    private void btnSistGuardadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSistGuardadoActionPerformed
+        JOptionPane.showMessageDialog(
+            this,
+            "La carga de sistema guardado aún no está implementada.",
+            "Información",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }//GEN-LAST:event_btnSistGuardadoActionPerformed
+
+    private void btnSistPreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSistPreActionPerformed
+        sistema.iniciarSistemaConDatosPrecargados();
+        abrirMenuPrincipal();
+    }//GEN-LAST:event_btnSistPreActionPerformed
+                                                      
+
+    private void abrirMenuPrincipal() {
+        JOptionPane.showMessageDialog(
+            this,
+            "Acá se abriría el Menú Principal.",
+            "Menú principal",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
 
     /**
      * @param args the command line arguments
