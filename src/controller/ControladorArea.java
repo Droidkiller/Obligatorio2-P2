@@ -36,7 +36,7 @@ public class ControladorArea {
     
     // Alta de área -------------------------------------------------------------------------
     private void abrirAltaArea() {
-        AltaArea vista = new AltaArea(principal, true);
+        AltaArea vista = new AltaArea(principal, false);
         sistema.agregarObserver(vista);
         refrescarListaAlta(vista);
 
@@ -101,7 +101,7 @@ public class ControladorArea {
     
     // Baja de área -------------------------------------------------------------------
     private void abrirBajaArea() {
-        BajaArea vista = new BajaArea(principal, true);
+        BajaArea vista = new BajaArea(principal, false);
         sistema.agregarObserver(vista);
         refrescarListaBaja(vista);
 
@@ -149,7 +149,7 @@ public class ControladorArea {
     
     // Modificación de área ----------------------------------------------------------------------------
     private void abrirModificacionArea() {
-        ModificacionArea vista = new ModificacionArea(principal, true);
+        ModificacionArea vista = new ModificacionArea(principal, false);
         sistema.agregarObserver(vista);
         refrescarListaModificacion(vista);
         ListSelectionListener selListener = e -> cargarDatosAreaSeleccionada(vista);
@@ -207,7 +207,7 @@ public class ControladorArea {
     
     // Movimiento de área -----------------------------------------------------------------------------------------------
     private void abrirMovimientosArea() {
-        MovimientoArea vista = new MovimientoArea(principal, true);
+        MovimientoArea vista = new MovimientoArea(principal, false);
         sistema.agregarObserver(vista);
         
         java.util.List<Area> lista = sistema.getAreas();

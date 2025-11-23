@@ -28,7 +28,7 @@ public class ControladorManager {
     }
     
     private void abrirAltaManager() {
-        AltaManagers vistaAlta = new AltaManagers(principal, true);        
+        AltaManagers vistaAlta = new AltaManagers(principal, false);        
         vistaAlta.setListaManagers(sistema.getManagers());
         vistaAlta.getBtnCrear().addActionListener(e -> crearManager(vistaAlta));
         vistaAlta.getBtnCerrar().addActionListener(e -> {
@@ -40,7 +40,7 @@ public class ControladorManager {
     }
 
     private void abrirBajaManager() {
-        BajaManager vistaBaja = new BajaManager(principal, true);
+        BajaManager vistaBaja = new BajaManager(principal, false);
         var managersSinEmp = sistema.getManagersSinEmpleados();
         String[] nombres = new String[managersSinEmp.size()];
         for (int i = 0; i < managersSinEmp.size(); i++) {
@@ -57,7 +57,7 @@ public class ControladorManager {
     }
 
     private void abrirModificacionManager() {
-        ModificarManager vistaMod = new ModificarManager(principal, true);
+        ModificarManager vistaMod = new ModificarManager(principal, false);
         vistaMod.setVisible(true);
         vistaMod.setListaManagers(sistema.getManagers());
         vistaMod.getListMan().addListSelectionListener(e -> llenarCamposManagerSeleccionado(vistaMod));

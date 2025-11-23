@@ -9,6 +9,7 @@ import model.Area;
 import model.Empleado;
 import model.Sistema;
 import model.archivos.ArchivoLectura;
+import view.Principal;
 import view.ReporteInteligente;
 import javax.swing.*;
 import java.io.*;
@@ -16,96 +17,94 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ControladorReporteInteligente {
-    private final ReporteInteligente vista;
+    private final Principal principal;
     private final Sistema sistema;
-    private final Gson gson = new Gson();
-    
-    public ControladorReporteInteligente(ReporteInteligente vista, Sistema sistema) {
-        this.vista = vista;
-        this.sistema = sistema;
+    private final Gson gson;
+
+    public ControladorReporteInteligente(Principal principal) {
+        this.principal = principal;
+        this.sistema = Sistema.getInstancia();
+        this.gson = new Gson();
+        agregarMenuListeners();
+    }
+
+    private void agregarMenuListeners() {
+        principal.getInteligente().addActionListener(e -> abrirReporte());
+    }
+
+    private void abrirReporte() {
+        ReporteInteligente vista = new ReporteInteligente(principal, false);
+
         sistema.agregarObserver(vista);
+
         vista.getBoxOrigen().addActionListener(e -> vista.cargarEmpleadosSegunOrigen());
-        vista.getBtnGenerar().addActionListener(e -> generarReporte());
+        vista.getBtnGenerar().addActionListener(e -> generarReporte(vista));
         vista.getBtnCerrar().addActionListener(e -> {
             sistema.quitarObserver(vista);
             vista.dispose();
         });
+
         vista.actualizar();
         vista.setVisible(true);
     }
-    
-    private void generarReporte() {
-        boolean ok = true;
+
+    private void generarReporte(ReporteInteligente vista) {
         String nombreOrigen = (String) vista.getBoxOrigen().getSelectedItem();
         String nombreDestino = (String) vista.getBoxDestino().getSelectedItem();
         String nombreEmpleado = (String) vista.getBoxEmpleado().getSelectedItem();
 
         if (nombreOrigen == null || nombreDestino == null || nombreEmpleado == null) {
             JOptionPane.showMessageDialog(vista, "Debe seleccionar área origen, área destino y empleado.");
-            ok = false;
+            return;
         }
 
-        Area origen = null;
-        Area destino = null;
+        Area origen = sistema.getAreas().stream()
+                .filter(a -> a.getNombre().equalsIgnoreCase(nombreOrigen))
+                .findFirst().orElse(null);
 
-        if (ok) {
-            for (Area a : sistema.getAreas()) {
-                if (origen == null && a.getNombre().equalsIgnoreCase(nombreOrigen)) {
-                    origen = a;
-                }
-                if (destino == null && a.getNombre().equalsIgnoreCase(nombreDestino)) {
-                    destino = a;
-                }
-            }
+        Area destino = sistema.getAreas().stream()
+                .filter(a -> a.getNombre().equalsIgnoreCase(nombreDestino))
+                .findFirst().orElse(null);
 
-            if (origen == null || destino == null) {
-                JOptionPane.showMessageDialog(vista, "No se encontraron las áreas seleccionadas.");
-                ok = false;
-            }
+        if (origen == null || destino == null) {
+            JOptionPane.showMessageDialog(vista, "No se encontraron las áreas seleccionadas.");
+            return;
         }
 
-        if (ok) {
-            Empleado empleado = null;
-            boolean encontrado = false;
-            for (Empleado e : sistema.getEmpleados()) {
-                if (!encontrado && e.getNombre().equalsIgnoreCase(nombreEmpleado)) {
-                    empleado = e;
-                    encontrado = true;
+        Empleado empleado = sistema.getEmpleados().stream()
+                .filter(e -> e.getNombre().equalsIgnoreCase(nombreEmpleado))
+                .findFirst().orElse(null);
+
+        if (empleado == null) {
+            JOptionPane.showMessageDialog(vista, "No se encontró el empleado seleccionado.");
+            return;
+        }
+
+        String cv = leerCV(empleado.getCedula());
+        String prompt = construirPrompt(origen, destino, empleado, cv);
+
+        vista.setIconoCargando();
+
+        SwingWorker<String, Void> worker = new SwingWorker<>() {
+            @Override
+            protected String doInBackground() throws Exception {
+                return llamarGemini(prompt);
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    String resultado = get();
+                    vista.mostrarResultado(resultado);
+                    vista.setIconoExito();
+                } catch (Exception ex) {
+                    vista.setIconoError();
+                    JOptionPane.showMessageDialog(vista, "Error generando reporte: " + ex.getMessage());
                 }
             }
+        };
 
-            if (empleado == null) {
-                JOptionPane.showMessageDialog(vista, "No se encontró el empleado seleccionado.");
-                ok = false;
-            }
-
-            if (ok && empleado != null) { // compiler now sees empleadoLocal is non-null
-                String cv = leerCV(empleado.getCedula());
-                String prompt = construirPrompt(origen, destino, empleado, cv);
-
-                vista.setIconoCargando();
-
-                SwingWorker<String, Void> worker = new SwingWorker<>() {
-                    @Override
-                    protected String doInBackground() throws Exception {
-                        return llamarGemini(prompt);
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            String resultado = get();
-                            vista.mostrarResultado(resultado);
-                            vista.setIconoExito();
-                        } catch (Exception ex) {
-                            vista.setIconoError();
-                            JOptionPane.showMessageDialog(vista, "Error generando reporte: " + ex.getMessage());
-                        }
-                    }
-                };
-                worker.execute();
-            }
-        }
+        worker.execute();
     }
     
     private String llamarGemini(String prompt) throws Exception {

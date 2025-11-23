@@ -4,6 +4,10 @@
  */
 package view;
 
+import model.Sistema;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 public class Principal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Principal.class.getName());
@@ -13,6 +17,13 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Sistema.getInstancia().guardarSistema();
+            }
+        });
     }
 
     /**
@@ -165,16 +176,23 @@ public class Principal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new Principal().setVisible(true));
     }
     
-    // Managers
-    public javax.swing.JMenuItem getAltaMan() {return altaMan;}
-    public javax.swing.JMenuItem getBajaMan() {return bajaMan;}
-    public javax.swing.JMenuItem getModificacionMan() {return modificacionMan;}
-    
     // Areas
     public javax.swing.JMenuItem getAltaArea() { return altaArea; }
     public javax.swing.JMenuItem getBajaArea() { return bajaArea; }
     public javax.swing.JMenuItem getModifiacionArea() { return modifiacionArea; }
     public javax.swing.JMenuItem getAreaMov() { return areaMov; }
+    
+    // Managers
+    public javax.swing.JMenuItem getAltaMan() {return altaMan;}
+    public javax.swing.JMenuItem getBajaMan() {return bajaMan;}
+    public javax.swing.JMenuItem getModificacionMan() {return modificacionMan;} 
+    
+    // Empleados
+    public javax.swing.JMenuItem getAltaEmp() { return altaEmp; }
+    
+    // Reportes
+    public javax.swing.JMenuItem getInteligente() { return inteligente; }
+    public javax.swing.JMenuItem getReporteMov() { return repoMov; }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem altaArea;

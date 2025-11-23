@@ -5,6 +5,7 @@
 package view;
 
 import model.Sistema;
+import controller.*;
 
 /**
  *
@@ -105,6 +106,11 @@ public class MenuInicio extends javax.swing.JFrame {
 
     private void abrirMenuPrincipal() {
         Principal p = new Principal();
+        new ControladorArea(p);
+        new ControladorManager(p);
+        new ControladorEmpleado(p);
+        new ControladorReporteMovimiento(p);
+        new ControladorReporteInteligente(p);
         p.setVisible(true);
         this.dispose();
     }

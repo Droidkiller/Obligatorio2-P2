@@ -11,31 +11,43 @@ import view.ReporteMovimiento;
 import view.Principal;
 import java.util.ArrayList;
 import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 public class ControladorReporteMovimiento {
-    private final ReporteMovimiento vista;
+
+    private final Principal principal;
     private final Sistema sistema;
-    private ArrayList<Movimiento> listaFiltrada = new ArrayList<>();
 
     public ControladorReporteMovimiento(Principal principal) {
+        this.principal = principal;
         this.sistema = Sistema.getInstancia();
-        this.vista = new ReporteMovimiento(principal, true);
-        agregarListeners();
-        vista.actualizar();
-        vista.setVisible(true);
+        agregarMenuListeners();
     }
 
-    private void agregarListeners() {
-        sistema.agregarObserver(vista);
-        vista.getBtnFiltrar().addActionListener(e -> aplicarFiltros());
-        vista.getBtnExportar().addActionListener(e -> exportarCSV());
-        vista.getBtnCerrar().addActionListener(e -> {
-            sistema.quitarObserver(vista);
-            vista.dispose();
-        });
+    private void agregarMenuListeners() {
+        principal.getReporteMov().addActionListener(e -> abrirReporteMovimiento());
     }
-    
-    private void aplicarFiltros() {
+
+    private void abrirReporteMovimiento() {
+        ReporteMovimiento vista = new ReporteMovimiento(principal, false);
+
+        sistema.agregarObserver(vista);
+        agregarListenersVentana(vista);
+
+        vista.actualizar();
+        vista.setVisible(true);
+
+        sistema.quitarObserver(vista);
+    }
+
+    private void agregarListenersVentana(ReporteMovimiento vista) {
+        vista.getBtnFiltrar().addActionListener(e -> aplicarFiltros(vista));
+        vista.getBtnExportar().addActionListener(e -> exportarCSV(vista));
+        vista.getBtnCerrar().addActionListener(e -> vista.dispose());
+    }
+
+    private void aplicarFiltros(ReporteMovimiento vista) {
         String mesStr = vista.getSelectedMes();
         String areaStr = vista.getSelectedArea();
         String empStr = vista.getSelectedEmpleado();
@@ -44,9 +56,8 @@ public class ControladorReporteMovimiento {
         ArrayList<Movimiento> result = new ArrayList<>();
 
         for (Movimiento m : movs) {
-
-            boolean okMes = mesStr.equals("Todos") || 
-                            Integer.toString(m.getMes()).equals(mesStr);
+            boolean okMes = mesStr.equals("Todos") ||
+                    Integer.toString(m.getMes()).equals(mesStr);
 
             boolean okArea = areaStr.equals("Todos") ||
                     m.getAreaOrigen().getNombre().equals(areaStr) ||
@@ -59,34 +70,37 @@ public class ControladorReporteMovimiento {
                 result.add(m);
             }
         }
-        
-        listaFiltrada = result;
+
         vista.cargarTabla(result);
     }
 
-    private void exportarCSV() {
-        javax.swing.JFileChooser chooser = new javax.swing.JFileChooser();
+    private void exportarCSV(ReporteMovimiento vista) {
+        JFileChooser chooser = new JFileChooser();
         int opcion = chooser.showSaveDialog(vista);
 
-        if (opcion == javax.swing.JFileChooser.APPROVE_OPTION) {
+        if (opcion == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             String path = file.getAbsolutePath();
+
             if (!path.toLowerCase().endsWith(".csv")) {
-                path = path + ".csv";
+                path += ".csv";
             }
+
             ArchivoGrabacion ag = new ArchivoGrabacion(path);
             ag.grabarLinea("Mes,AreaOrigen,AreaDestino,Empleado");
 
-            for (Movimiento m : listaFiltrada) {
+            for (Movimiento m : sistema.getMovimientos()) {
                 String linea =
-                    m.getMes() + "," +
-                    m.getAreaOrigen().getNombre() + "," +
-                    m.getAreaDestino().getNombre() + "," +
-                    m.getEmpleado().getNombre();
+                        m.getMes() + "," +
+                        m.getAreaOrigen().getNombre() + "," +
+                        m.getAreaDestino().getNombre() + "," +
+                        m.getEmpleado().getNombre();
+
                 ag.grabarLinea(linea);
             }
             ag.cerrar();
-            javax.swing.JOptionPane.showMessageDialog(vista, "CSV exportado correctamente.");
+
+            JOptionPane.showMessageDialog(vista, "CSV exportado correctamente.");
         }
     }
 }
