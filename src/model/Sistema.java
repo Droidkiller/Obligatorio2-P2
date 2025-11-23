@@ -5,8 +5,10 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.io.File;
 import model.archivos.ArchivoGrabacion;
+import model.archivos.ArchivoLectura;
 
 public class Sistema {
     private static final Sistema instancia = new Sistema(); 
@@ -168,16 +170,10 @@ public class Sistema {
         managers.clear();
         empleados.clear();
         movimientos.clear();
-        notificarObservers();
     }
 
     public void iniciarSistemaConDatosPrecargados() {
-
-        areas.clear();
-        managers.clear();
-        empleados.clear();
-        movimientos.clear();
-
+        iniciarSistemaVacio();
 
         Area personal = new Area(
                 "Personal",
@@ -236,11 +232,198 @@ public class Sistema {
         notificarObservers();
     }
 
-    /**
-     * Iniciar el sistema con datos guardados en archivo.
-     */
     public void iniciarSistemaGuardado() {
+        File archivo = new File("sistema.txt");
+        boolean existe = archivo.exists();
+        //se limpian las listas y si no existe un archivo para cargar, el sistema inicia vacío
+        iniciarSistemaVacio(); 
+        if (existe) {
+            ArchivoLectura in = new ArchivoLectura("sistema.txt");
+            String section = "";
 
+            HashMap<String, Area> areasMap = new HashMap<>();
+            HashMap<Integer, Manager> managersMap = new HashMap<>();
+            HashMap<Integer, Empleado> empleadosMap = new HashMap<>();
+
+            boolean hayLineas = in.hayMasLineas();
+
+            while (hayLineas) {
+                String linea = in.linea().trim();
+                boolean esVacia = linea.length() == 0;
+
+                if (!esVacia) {
+
+                    boolean esSeccion = linea.startsWith("[");
+                    if (esSeccion) {
+                        section = linea;
+                    } else {
+
+                        String[] p = linea.split(";");
+
+                        // AREAS
+                        if (section.equals("[AREAS]")) {
+
+                            Area area = new Area(p[0], p[1], Double.parseDouble(p[2]));
+
+                            String[] costos = p[3].split(",");
+                            double[] arr = area.getCostosMensuales();
+
+                            int i = 0;
+                            while (i < costos.length) {
+                                arr[i] = Double.parseDouble(costos[i]);
+                                i++;
+                            }
+
+                            areas.add(area);
+                            areasMap.put(p[0], area);
+                        }
+
+                        // MANAGERS
+                        if (section.equals("[MANAGERS]")) {
+
+                            int ced = Integer.parseInt(p[0]);
+                            Manager m = new Manager(
+                                p[1], 
+                                ced, 
+                                Integer.parseInt(p[3]), 
+                                Integer.parseInt(p[2])
+                            );
+
+                            managers.add(m);
+                            managersMap.put(ced, m);
+                        }
+
+                        // EMPLEADOS
+                        if (section.equals("[EMPLEADOS]")) {
+
+                            int ced = Integer.parseInt(p[0]);
+
+                            Manager man = null;
+                            if (p[5].length() > 0) {
+                                man = managersMap.get(Integer.parseInt(p[5]));
+                            }
+
+                            Area ar = null;
+                            if (p[6].length() > 0) {
+                                ar = areasMap.get(p[6]);
+                            }
+
+                            Empleado e = new Empleado(
+                                p[1],
+                                ced,
+                                Integer.parseInt(p[2]),
+                                Double.parseDouble(p[3]),
+                                p[4],
+                                man,
+                                ar
+                            );
+
+                            empleados.add(e);
+                            empleadosMap.put(ced, e);
+
+                            if (man != null) man.agregarEmpleado(e);
+                            if (ar != null)  ar.agregarEmpleado(e);
+                        }
+
+                        // MOVIMIENTOS
+                        if (section.equals("[MOVIMIENTOS]")) {
+
+                            int cedEmp = Integer.parseInt(p[3]);
+
+                            Movimiento mov = new Movimiento(
+                                Integer.parseInt(p[0]),
+                                areasMap.get(p[1]),
+                                areasMap.get(p[2]),
+                                empleadosMap.get(cedEmp)
+                            );
+
+                            movimientos.add(mov);
+                        }
+                    }
+                }
+
+                hayLineas = in.hayMasLineas();
+            }
+
+            in.cerrar();
+        }
+    }
+    
+    public void guardarSistema() {
+        ArchivoGrabacion out = new ArchivoGrabacion("sistema.txt");
+
+        // AREAS
+        out.grabarLinea("[AREAS]");
+        for (Area a : areas) {
+            double[] c = a.getCostosMensuales();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < c.length; i++) {
+                if (i > 0) sb.append(",");
+                sb.append(c[i]);
+            }
+
+            out.grabarLinea(
+                a.getNombre() + ";" +
+                a.getDescripcion() + ";" +
+                a.getPresupuesto() + ";" +
+                sb
+            );
+        }
+        out.grabarLinea("");
+
+        // MANAGERS
+        out.grabarLinea("[MANAGERS]");
+        for (Manager m : managers) {
+            // empleados del manager
+            StringBuilder empList = new StringBuilder();
+            ArrayList<Empleado> lista = m.getEmpleados();
+
+            for (int i = 0; i < lista.size(); i++) {
+                if (i > 0) empList.append(",");
+                empList.append(lista.get(i).getCedula());
+            }
+
+            out.grabarLinea(
+                m.getCedula() + ";" +
+                m.getNombre() + ";" +
+                m.getCelular() + ";" +
+                m.getAntiguedad() + ";" +
+                empList
+            );
+        }
+        out.grabarLinea("");
+
+        // EMPLEADOS
+        out.grabarLinea("[EMPLEADOS]");
+        for (Empleado e : empleados) {
+            String areaNombre = e.getArea() != null ? e.getArea().getNombre() : "";
+            String mgrCedula = e.getManager() != null ? Integer.toString(e.getManager().getCedula()) : "";
+
+            out.grabarLinea(
+                e.getCedula() + ";" +
+                e.getNombre() + ";" +
+                e.getCelular() + ";" +
+                e.getSalario() + ";" +
+                e.getCv() + ";" +
+                mgrCedula + ";" +
+                areaNombre
+            );
+        }
+        out.grabarLinea("");
+
+        // MOVIMIENTOS
+        out.grabarLinea("[MOVIMIENTOS]");
+        for (Movimiento m : movimientos) {
+            out.grabarLinea(
+                m.getMes() + ";" +
+                m.getAreaOrigen().getNombre() + ";" +
+                m.getAreaDestino().getNombre() + ";" +
+                m.getEmpleado().getCedula()
+            );
+        }
+        out.grabarLinea("");
+
+        out.cerrar();
     }
 
 

@@ -53,7 +53,7 @@ public class ControladorReporteMovimiento {
                     m.getAreaDestino().getNombre().equals(areaStr);
 
             boolean okEmp = empStr.equals("Todos") ||
-                    m.getEmployee().getNombre().equals(empStr);
+                    m.getEmpleado().getNombre().equals(empStr);
 
             if (okMes && okArea && okEmp) {
                 result.add(m);
@@ -82,7 +82,7 @@ public class ControladorReporteMovimiento {
                     m.getMes() + "," +
                     m.getAreaOrigen().getNombre() + "," +
                     m.getAreaDestino().getNombre() + "," +
-                    m.getEmployee().getNombre();
+                    m.getEmpleado().getNombre();
                 ag.grabarLinea(linea);
             }
             ag.cerrar();

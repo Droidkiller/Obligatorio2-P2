@@ -278,7 +278,7 @@ public class ReporteMovimiento extends javax.swing.JDialog implements Observer {
                 m.getMes(),
                 m.getAreaOrigen().getNombre(),
                 m.getAreaDestino().getNombre(),
-                m.getEmployee().getNombre()
+                m.getEmpleado().getNombre()
             });
         }
 

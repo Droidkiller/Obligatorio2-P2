@@ -21,7 +21,7 @@ public class Movimiento {
     public int getMes() { return mes; }
     public Area getAreaOrigen() { return areaOrigen; }
     public Area getAreaDestino() { return areaDestino; }
-    public Empleado getEmployee() { return empleado; }
+    public Empleado getEmpleado() { return empleado; }
     
     @Override
     public String toString() {
