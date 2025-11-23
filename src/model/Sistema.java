@@ -7,6 +7,8 @@ package model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.File;
+import java.util.Comparator;
+import java.util.List;
 import model.archivos.ArchivoGrabacion;
 import model.archivos.ArchivoLectura;
 
@@ -83,6 +85,18 @@ public class Sistema {
         a.setDescripcion(nuevaDescripcion);
         notificarObservers();
     }
+    
+    public double porcentajeArea(Area area) {
+        double presupuesto = area.getPresupuesto();
+        if (presupuesto <= 0) return 0;
+
+        double total = 0;
+        for (Empleado e : area.getEmpleados()) {
+            total += e.getSalario() * 12; 
+        }
+        return (total / presupuesto) * 100.0;
+    }
+
     public void moverEmpleado(Empleado e, Area origen, Area destino, int mesInicio) throws Exception {
         if (!puedeMoverEmpleado(e, destino, mesInicio)) {
             throw new Exception("No hay presupuesto suficiente en el área de destino.");
@@ -164,6 +178,14 @@ public class Sistema {
 
         return resultado;
     }
+    
+    public List<Empleado> getEmpleadosOrdenados(Area area) {
+        List<Empleado> lista = new ArrayList<>(area.getEmpleados());
+        
+        lista.sort(Comparator.comparing(Empleado::getNombre, String.CASE_INSENSITIVE_ORDER));
+        return lista;
+    }
+
 
     public void iniciarSistemaVacio() {
         areas.clear();

@@ -1,11 +1,13 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ Aitana Alvarez 340201
+ Francisco Bonanni 299134
  */
+
 package view;
 
 import java.awt.Color;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,7 +24,7 @@ public class ReporteEstadoAreas extends javax.swing.JDialog implements Observer 
     
     private final Sistema sistema = Sistema.getInstancia();
     private List<Area> areasOrdenadas = new ArrayList<>();
-
+    private Area areaSeleccionada;
 
    public ReporteEstadoAreas(java.awt.Frame parent, boolean modal) {
     super(parent, modal);
@@ -34,6 +36,12 @@ public class ReporteEstadoAreas extends javax.swing.JDialog implements Observer 
     panelEmpleados.setLayout(new java.awt.GridLayout(0, 3, 5, 5));
 
     refrescar();
+    addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosed(java.awt.event.WindowEvent e) {
+            sistema.quitarObserver(ReporteEstadoAreas.this);
+         }
+        });
 }
 @Override
 public void actualizar() {
@@ -144,44 +152,42 @@ public void actualizar() {
 
     }
     private void refrescar() {
-        cargarAreas();
-        limpiarEmpleados();
-        labAreaSel.setText("Área seleccionada: ");
-        labPor.setText("Presupuesto asignado:  %");
-    }
-
-    private void limpiarEmpleados() {
-        panelEmpleados.removeAll();
-        panelEmpleados.revalidate();
-        panelEmpleados.repaint();
-    }
-
- private void cargarAreas() {
-        panelArea.removeAll();
-
         areasOrdenadas = new ArrayList<>(sistema.getAreas());
 
-        // ordenar por porcentaje de presupuesto anual asignado, de mayor a menor
-        Collections.sort(areasOrdenadas, new Comparator<Area>() {
-            @Override
-            public int compare(Area a1, Area a2) {
-                return Double.compare(porcentajeAsignado(a2), porcentajeAsignado(a1));
-            }
+        
+        Collections.sort(areasOrdenadas, (a1, a2) -> {
+            double p1 = calcularPorcentajeArea(a1);
+            double p2 = calcularPorcentajeArea(a2);
+            return Double.compare(p2, p1); // orden decreciente
         });
 
-        for (Area area : areasOrdenadas) {
-            JButton btn = new JButton(area.getNombre());
-            btn.setMargin(new Insets(-5, -5, -5, -5));
+        construirBotonesAreas();
 
-            double p = porcentajeAsignado(area); 
-
-            if (p > 0.90) {
-                btn.setBackground(Color.RED);
-            } else if (p >= 0.70) {
-                btn.setBackground(Color.YELLOW);
-            } else {
-                btn.setBackground(Color.LIGHT_GRAY);
+        if (!areasOrdenadas.isEmpty()) {
+            if (areaSeleccionada == null || !areasOrdenadas.contains(areaSeleccionada)) {
+                areaSeleccionada = areasOrdenadas.get(0);
             }
+            seleccionarArea(areaSeleccionada);
+        } else {
+            areaSeleccionada = null;
+            
+            labAreaSel.setText("Sin áreas");
+            panelEmpleados.removeAll();
+            panelEmpleados.revalidate();
+            panelEmpleados.repaint();
+        }
+    }
+
+    private void construirBotonesAreas() {
+        panelArea.removeAll();
+
+        for (Area area : areasOrdenadas) {
+            double porcentaje = calcularPorcentajeArea(area);
+
+            JButton btn = new JButton(area.getNombre());
+            btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+            btn.setMargin(new Insets(5, 10, 5, 10));
+            btn.setBackground(colorPorPorcentaje(porcentaje));
             btn.setOpaque(true);
             btn.setBorderPainted(false);
 
@@ -193,103 +199,166 @@ public void actualizar() {
         panelArea.revalidate();
         panelArea.repaint();
     }
-
-    private double porcentajeAsignado(Area area) {
-        double totalSueldosAnuales = 0;
-
-        // suma de salarios anuales de los empleados del área
-        for (Empleado e : area.getEmpleados()) {
-            totalSueldosAnuales += e.getSalario() * 12;
-        }
-
-        if (area.getPresupuesto() == 0) {
+    private double calcularPorcentajeArea(Area area) {
+        double presupuesto = area.getPresupuesto();
+        if (presupuesto <= 0) {
             return 0;
         }
-        return totalSueldosAnuales / area.getPresupuesto(); 
-    }
-    
-    private void seleccionarArea(Area area) {
-        double porcentajeAsignadoArea = porcentajeAsignado(area);
 
-        labAreaSel.setText("Área seleccionada: " + area.getNombre());
-        labPor.setText(String.format("Presupuesto asignado: %.0f%%", porcentajeAsignadoArea * 100));
+        double totalSalariosAnuales = 0;
+        for (Empleado e : area.getEmpleados()) {
+            totalSalariosAnuales += e.getSalario() * 12; 
+        }
+
+        return (totalSalariosAnuales / presupuesto) * 100.0;
+    }
+    private Color colorPorPorcentaje(double porcentaje) {
+        if (porcentaje > 90) {
+            return Color.RED;
+        } else if (porcentaje >= 70) {
+            return Color.YELLOW;
+        } else {
+            return Color.LIGHT_GRAY;
+        }
+    }
+    private void seleccionarArea(Area area) {
+        this.areaSeleccionada = area;
+
+        double p = calcularPorcentajeArea(area);
+        labAreaSel.setText(
+                area.getNombre() + " " + String.format("%.0f%%", p)
+        );
 
         cargarEmpleados(area);
-        
     }
 
-    
- private void cargarEmpleados(Area area) {
-    panelEmpleados.removeAll();
+    private void cargarEmpleados(Area area) {
+        panelEmpleados.removeAll();
 
-    ArrayList<Empleado> lista = new ArrayList<>(area.getEmpleados());
-    Collections.sort(lista, Comparator.comparing(Empleado::getNombre));
+        List<Empleado> empleados = new ArrayList<>(area.getEmpleados());
+        // ordeno por nombre
+        empleados.sort(Comparator.comparing(Empleado::getNombre, String.CASE_INSENSITIVE_ORDER));
 
-    if (lista.isEmpty()) {
+        if (empleados.isEmpty()) {
+            panelEmpleados.revalidate();
+            panelEmpleados.repaint();
+            return;
+        }
+
+        double minSal = empleados.stream().mapToDouble(Empleado::getSalario).min().orElse(0);
+        double maxSal = empleados.stream().mapToDouble(Empleado::getSalario).max().orElse(0);
+
+        for (Empleado e : empleados) {
+            JButton btn = new JButton(e.getNombre());
+            btn.setMargin(new Insets(5, 10, 5, 10));
+            btn.setForeground(Color.WHITE);
+            btn.setBackground(colorPorSalario(e.getSalario(), minSal, maxSal));
+            btn.setOpaque(true);
+            btn.setBorderPainted(false);
+
+            btn.addActionListener(ev -> mostrarDetalleEmpleado(e));
+
+            panelEmpleados.add(btn);
+        }
+
         panelEmpleados.revalidate();
         panelEmpleados.repaint();
-        return;
     }
 
-    double min = Double.MAX_VALUE;
-    double max = Double.MIN_VALUE;
-    for (Empleado e : lista) {
-        double s = e.getSalario();
-        if (s < min) min = s;
-        if (s > max) max = s;
-    }
-
-    for (Empleado emp : lista) {
-        JButton btn = new JButton(emp.getNombre());
-       
-        btn.setMargin(new Insets(-5, -5, -5, -5));
-        btn.setFocusPainted(false);
-        btn.setBorderPainted(false);
-        btn.setOpaque(true);
-        btn.setForeground(Color.WHITE);
-
-        double salario = emp.getSalario();
-        btn.setBackground(colorEscalaAzul(salario, min, max));
-
-        btn.addActionListener(e -> mostrarEmpleado(emp));
-
-        panelEmpleados.add(btn);
-    }
-
-    panelEmpleados.revalidate();
-    panelEmpleados.repaint();
-}
-
-
-    private Color colorEscalaAzul(double salario, double min, double max) {
-        if (max <= min) {
-            return Color.BLACK;
+    private Color colorPorSalario(double salario, double min, double max) {
+        if (max <= min) { // todos cobran lo mismo
+            return new Color(0, 0, 255); 
         }
-        double t = (salario - min) / (max - min); 
-        int r = 0;
-        int g = 0;
-        int b = (int) Math.round(255 * t);
-        return new Color(r, g, b);
+        double factor = (salario - min) / (max - min); 
+        int blue = (int) Math.round(255 * factor);     
+        return new Color(0, 0, blue);
     }
-
-    private void mostrarEmpleado(Empleado e) {
+    private void mostrarDetalleEmpleado(Empleado e) {
         StringBuilder sb = new StringBuilder();
         sb.append("Nombre: ").append(e.getNombre()).append("\n");
         sb.append("Cédula: ").append(e.getCedula()).append("\n");
         sb.append("Celular: ").append(e.getCelular()).append("\n");
-        sb.append("Salario mensual: ").append(e.getSalario()).append("\n");
-        sb.append("Manager: ").append(e.getManager().getNombre()).append("\n");
-        sb.append("Área: ").append(e.getArea().getNombre()).append("\n");
+        sb.append("Salario mensual: ").append(String.format("%.2f", e.getSalario())).append("\n");
+
+        if (e.getManager() != null) {
+            sb.append("Manager: ").append(e.getManager().getNombre()).append("\n");
+        }
+        if (e.getArea() != null) {
+            sb.append("Área: ").append(e.getArea().getNombre()).append("\n");
+        }
+
+        sb.append("\nCV:\n").append(e.getCv());
 
         JOptionPane.showMessageDialog(
                 this,
                 sb.toString(),
-                "Información del empleado",
+                "Datos del empleado",
                 JOptionPane.INFORMATION_MESSAGE
         );
+    }    
+   public void cargarListadoAreas(List<Area> lista, ActionListener listener) {
+        panelArea.removeAll();
+
+        for (Area area : lista) {
+            double porcentaje = calcularPorcentajeArea(area);
+
+            JButton btn = new JButton(area.getNombre());
+            btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+            btn.setMargin(new Insets(5, 10, 5, 10));
+            btn.setBackground(colorPorPorcentaje(porcentaje));
+            btn.setOpaque(true);
+            btn.setBorderPainted(false);
+
+            btn.putClientProperty("obj", area);  // para que el controlador sepa qué área es
+            btn.addActionListener(listener);
+
+            panelArea.add(btn);
+        }
+
+        panelArea.revalidate();
+        panelArea.repaint();
     }
+
+    public void mostrarAreaSeleccionada(Area area, double porcentaje) {
+        this.areaSeleccionada = area;
+        labAreaSel.setText("Área seleccionada: " + area.getNombre());
+        labPor.setText("Presupuesto asignado: " + String.format("%.0f%%", porcentaje));
+    }
+
+    public void cargarEmpleados(List<Empleado> lista, ActionListener listener) {
+        panelEmpleados.removeAll();
+
+        if (lista == null || lista.isEmpty()) {
+            panelEmpleados.revalidate();
+            panelEmpleados.repaint();
+            return;
+        }
+
+        double minSal = lista.stream().mapToDouble(Empleado::getSalario).min().orElse(0);
+        double maxSal = lista.stream().mapToDouble(Empleado::getSalario).max().orElse(0);
+
+        for (Empleado e : lista) {
+            JButton btn = new JButton(e.getNombre());
+            btn.setMargin(new Insets(5, 10, 5, 10));
+            btn.setForeground(Color.WHITE);
+            btn.setBackground(colorPorSalario(e.getSalario(), minSal, maxSal));
+            btn.setOpaque(true);
+            btn.setBorderPainted(false);
+
+            btn.putClientProperty("obj", e);  // el controlador recibe el empleado
+            btn.addActionListener(listener);
+
+            panelEmpleados.add(btn);
+        }
+
+        panelEmpleados.revalidate();
+        panelEmpleados.repaint();
+    }
+
+    public void mostrarPopupEmpleado(Empleado e) {
+        mostrarDetalleEmpleado(e);
+    } 
     
-   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel labAreaSel;
     private javax.swing.JLabel labAreas;
