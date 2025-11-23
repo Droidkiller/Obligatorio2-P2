@@ -26,27 +26,28 @@ public class ReporteEstadoAreas extends javax.swing.JDialog implements Observer 
     private List<Area> areasOrdenadas = new ArrayList<>();
     private Area areaSeleccionada;
 
-   public ReporteEstadoAreas(java.awt.Frame parent, boolean modal) {
-    super(parent, modal);
-    initComponents();
+    public ReporteEstadoAreas(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+
+        sistema.agregarObserver(this);
+
+        panelArea.setLayout(new java.awt.GridLayout(0, 1, 5, 5));
+        panelEmpleados.setLayout(new java.awt.GridLayout(0, 3, 5, 5));
+
+        refrescar();
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                sistema.quitarObserver(ReporteEstadoAreas.this);
+             }
+            });
+    }
     
-    sistema.agregarObserver(this);
-
-    panelArea.setLayout(new java.awt.GridLayout(0, 1, 5, 5));
-    panelEmpleados.setLayout(new java.awt.GridLayout(0, 3, 5, 5));
-
-    refrescar();
-    addWindowListener(new java.awt.event.WindowAdapter() {
-        @Override
-        public void windowClosed(java.awt.event.WindowEvent e) {
-            sistema.quitarObserver(ReporteEstadoAreas.this);
-         }
-        });
-}
-@Override
-public void actualizar() {
-    refrescar();
-}
+    @Override
+    public void actualizar() {
+        refrescar();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

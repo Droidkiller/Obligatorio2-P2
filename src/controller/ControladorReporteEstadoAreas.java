@@ -4,79 +4,87 @@
  */
 package controller;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import javax.swing.JButton;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import model.Area;
 import model.Empleado;
 import model.Sistema;
 import view.ReporteEstadoAreas;
+import view.Principal;
 
-public class ControladorReporteEstadoAreas implements ActionListener {
+public class ControladorReporteEstadoAreas {
 
-    private final ReporteEstadoAreas vista;
-    private final Sistema sistema = Sistema.getInstancia();
+    private final Principal principal;
+    private final Sistema sistema;
 
-    private List<Area> areasOrdenadas;
-    private Area areaSeleccionada;
-
-    public ControladorReporteEstadoAreas(ReporteEstadoAreas vista) {
-        this.vista = vista;
-        cargarAreas();
+    public ControladorReporteEstadoAreas(Principal principal) {
+        this.principal = principal;
+        this.sistema = Sistema.getInstancia();
+        agregarMenuListeners();
     }
-    /*Carga de areas*/
-    private void cargarAreas() {
-        areasOrdenadas = sistema.getAreas();
 
-        // Ordenar por porcentaje de presupuesto usado
-        Collections.sort(areasOrdenadas, (a1, a2) -> {
-            double p1 = sistema.porcentajeArea(a1);
-            double p2 = sistema.porcentajeArea(a2);
-            return Double.compare(p2, p1);
+    private void agregarMenuListeners() {
+        principal.getReporteAreas().addActionListener(e -> abrirReporte());
+    }
+
+    private void abrirReporte() {
+        ReporteEstadoAreas vista = new ReporteEstadoAreas(principal, false);
+        sistema.agregarObserver(vista);
+
+        vista.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                sistema.quitarObserver(vista);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                sistema.quitarObserver(vista);
+            }
         });
 
-        vista.cargarListadoAreas(areasOrdenadas, this);
+        cargarAreas(vista);
+        vista.setVisible(true);
+    }
+
+    private void cargarAreas(ReporteEstadoAreas vista) {
+        List<Area> areasOrdenadas = sistema.getAreas();
+
+        // Orden descendente por porcentaje usado
+        Collections.sort(
+            areasOrdenadas,
+            (a1, a2) -> Double.compare(
+                sistema.porcentajeArea(a2),
+                sistema.porcentajeArea(a1)
+            )
+        );
+
+        vista.cargarListadoAreas(areasOrdenadas, e -> {
+                Area area = (Area)((javax.swing.JButton)e.getSource()).getClientProperty("obj");
+                seleccionarArea(area, vista);
+            }
+        );
 
         if (!areasOrdenadas.isEmpty()) {
-            seleccionarArea(areasOrdenadas.get(0));
+            seleccionarArea(areasOrdenadas.get(0), vista);
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JButton src = (JButton) e.getSource();
-        Object obj = src.getClientProperty("obj");
-
-        if (obj instanceof Area) {
-            seleccionarArea((Area) obj);
-        }
-
-        if (obj instanceof Empleado) {
-            mostrarEmpleado((Empleado) obj);
-        }
-    }
-
-  /*Seleccion de area*/
-    private void seleccionarArea(Area area) {
-        this.areaSeleccionada = area;
-
+    private void seleccionarArea(Area area, ReporteEstadoAreas vista) {
         double porcentaje = sistema.porcentajeArea(area);
-
         vista.mostrarAreaSeleccionada(area, porcentaje);
 
         List<Empleado> empleados = sistema.getEmpleadosOrdenados(area);
 
-        vista.cargarEmpleados(empleados, this);
-    }
-
-    // ---------------------------------------------
-    // INFO EMPLEADO
-    // ---------------------------------------------
-    private void mostrarEmpleado(Empleado e) {
-        vista.mostrarPopupEmpleado(e);
+        vista.cargarEmpleados(
+            empleados,
+            e -> {
+                Empleado emp = (Empleado)((javax.swing.JButton)e.getSource()).getClientProperty("obj");
+                vista.mostrarPopupEmpleado(emp);
+            }
+        );
     }
 }

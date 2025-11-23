@@ -193,6 +193,7 @@ public class Principal extends javax.swing.JFrame {
     // Reportes
     public javax.swing.JMenuItem getInteligente() { return inteligente; }
     public javax.swing.JMenuItem getReporteMov() { return repoMov; }
+    public javax.swing.JMenuItem getReporteAreas() { return estado; }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem altaArea;
