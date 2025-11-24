@@ -110,6 +110,7 @@ public class Sistema {
     
     public void registrarMovimiento(Movimiento m) {
         movimientos.add(m);
+        notificarObservers();
     }
     
     public void crearEmpleado(String nombre, int cedula, int celular,
@@ -194,6 +195,16 @@ public class Sistema {
         managers.clear();
         empleados.clear();
         movimientos.clear();
+        File carpeta = new File("cvs");
+            if (carpeta.exists() && carpeta.isDirectory()) {
+                File[] archivos = carpeta.listFiles();
+                    if (archivos != null) {
+                        for (File f : archivos) {
+                            f.delete(); 
+                        }
+                    }
+               carpeta.delete();
+            }
     }
 
     public void iniciarSistemaConDatosPrecargados() {
@@ -251,9 +262,6 @@ public class Sistema {
         managers.add(ricardo);
         managers.add(laura);
         managers.add(juanPablo);
-
-
-        notificarObservers();
     }
 
     public void iniciarSistemaGuardado() {

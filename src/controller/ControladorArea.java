@@ -7,6 +7,7 @@ package controller;
 import model.Area;
 import model.Sistema;
 import model.Empleado;
+import model.Movimiento;
 import view.Principal;
 import view.AltaArea;
 import view.BajaArea;
@@ -302,8 +303,9 @@ public class ControladorArea {
                     JOptionPane.showMessageDialog(vista, "No hay presupuesto suficiente en el área destino.");
                 } else {
                     try {
-                        sistema.moverEmpleado(empleado, aOrigen, aDestino, mesInicio);
-                        sistema.notificarObservers();
+                        Movimiento m = new Movimiento(mesInicio, aOrigen, aDestino, empleado);
+                        sistema.moverEmpleado(empleado, aOrigen, aDestino, mesInicio);                        
+                        sistema.registrarMovimiento(m);
 
                         JOptionPane.showMessageDialog(vista, "Movimiento realizado.");
 

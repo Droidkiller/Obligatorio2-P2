@@ -35,7 +35,8 @@ public class ControladorEmpleado {
             sistema.quitarObserver(vista);
             vista.dispose();
         });
-
+        
+        vista.actualizar();
         vista.setVisible(true);
     }
     
@@ -70,7 +71,6 @@ public class ControladorEmpleado {
         try {
             sistema.crearEmpleado(nombre, cedula, celular, salario, vista.getCvTexto(), manager, area);
             JOptionPane.showMessageDialog(vista, "Empleado creado exitosamente.");
-            vista.dispose();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(vista, ex.getMessage());
         }
