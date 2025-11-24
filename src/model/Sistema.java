@@ -191,24 +191,27 @@ public class Sistema {
 
 
     public void iniciarSistemaVacio() {
+        limpiarListas();
+        File carpeta = new File("cvs");
+        if (carpeta.exists() && carpeta.isDirectory()) {
+            File[] archivos = carpeta.listFiles();
+            if (archivos != null) {
+                for (File f : archivos) {
+                    f.delete(); 
+                }
+            }
+        }
+    }
+    
+    public void limpiarListas() {
         areas.clear();
         managers.clear();
         empleados.clear();
         movimientos.clear();
-        File carpeta = new File("cvs");
-            if (carpeta.exists() && carpeta.isDirectory()) {
-                File[] archivos = carpeta.listFiles();
-                    if (archivos != null) {
-                        for (File f : archivos) {
-                            f.delete(); 
-                        }
-                    }
-               carpeta.delete();
-            }
     }
 
     public void iniciarSistemaConDatosPrecargados() {
-        iniciarSistemaVacio();
+        limpiarListas();
 
         Area personal = new Area(
                 "Personal",
@@ -268,7 +271,7 @@ public class Sistema {
         File archivo = new File("sistema.txt");
         boolean existe = archivo.exists();
         //se limpian las listas y si no existe un archivo para cargar, el sistema inicia vacío
-        iniciarSistemaVacio(); 
+        limpiarListas(); 
         if (existe) {
             ArchivoLectura in = new ArchivoLectura("sistema.txt");
             String section = "";
