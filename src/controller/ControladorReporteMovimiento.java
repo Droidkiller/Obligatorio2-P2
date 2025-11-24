@@ -37,14 +37,15 @@ public class ControladorReporteMovimiento {
 
         vista.actualizar();
         vista.setVisible(true);
-
-        sistema.quitarObserver(vista);
     }
 
     private void agregarListenersVentana(ReporteMovimiento vista) {
         vista.getBtnFiltrar().addActionListener(e -> aplicarFiltros(vista));
         vista.getBtnExportar().addActionListener(e -> exportarCSV(vista));
-        vista.getBtnCerrar().addActionListener(e -> vista.dispose());
+        vista.getBtnCerrar().addActionListener(e -> {
+            sistema.quitarObserver(vista);
+            vista.dispose();
+        });
     }
 
     private void aplicarFiltros(ReporteMovimiento vista) {
@@ -52,19 +53,34 @@ public class ControladorReporteMovimiento {
         String areaStr = vista.getSelectedArea();
         String empStr = vista.getSelectedEmpleado();
 
+        String[] meses = { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                           "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
+
+        boolean usarFiltroMes = !mesStr.equals("Todos");
+        int numeroMes = 0; // 1..12
+        if (usarFiltroMes) {
+            for (int i = 0; i < meses.length; i++) {
+                if (meses[i].equalsIgnoreCase(mesStr)) {
+                    numeroMes = i + 1;
+                }
+            }
+        }
+
         ArrayList<Movimiento> movs = sistema.getMovimientos();
         ArrayList<Movimiento> result = new ArrayList<>();
 
         for (Movimiento m : movs) {
-            boolean okMes = mesStr.equals("Todos") ||
-                    Integer.toString(m.getMes()).equals(mesStr);
+            boolean okMes = true;
+            if (usarFiltroMes) {
+                okMes = (m.getMes() == numeroMes);
+            }
 
             boolean okArea = areaStr.equals("Todos") ||
-                    m.getAreaOrigen().getNombre().equals(areaStr) ||
-                    m.getAreaDestino().getNombre().equals(areaStr);
+                             m.getAreaOrigen().getNombre().equals(areaStr) ||
+                             m.getAreaDestino().getNombre().equals(areaStr);
 
             boolean okEmp = empStr.equals("Todos") ||
-                    m.getEmpleado().getNombre().equals(empStr);
+                             m.getEmpleado().getNombre().equals(empStr);
 
             if (okMes && okArea && okEmp) {
                 result.add(m);

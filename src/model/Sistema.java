@@ -110,6 +110,7 @@ public class Sistema {
     
     public void registrarMovimiento(Movimiento m) {
         movimientos.add(m);
+        notificarObservers();
     }
     
     public void crearEmpleado(String nombre, int cedula, int celular,
@@ -251,9 +252,6 @@ public class Sistema {
         managers.add(ricardo);
         managers.add(laura);
         managers.add(juanPablo);
-
-
-        notificarObservers();
     }
 
     public void iniciarSistemaGuardado() {

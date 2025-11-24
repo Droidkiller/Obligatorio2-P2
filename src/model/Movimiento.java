@@ -6,10 +6,10 @@
 package model;
 
 public class Movimiento {
-    private final int mes;
-    private final Area areaOrigen;
-    private final Area areaDestino;
-    private final Empleado empleado;
+    private int mes;
+    private Area areaOrigen;
+    private Area areaDestino;
+    private Empleado empleado;
 
     public Movimiento(int mes, Area origen, Area destino, Empleado empleado) {
         this.mes = mes;
@@ -19,9 +19,13 @@ public class Movimiento {
     }
 
     public int getMes() { return mes; }
+    public void setMes(int mes) { this.mes = mes; }
     public Area getAreaOrigen() { return areaOrigen; }
+    public void setAreaOrigen(Area areaOrigen) { this.areaOrigen = areaOrigen; }
     public Area getAreaDestino() { return areaDestino; }
+    public void setAreaDestino(Area areaDestino) { this.areaDestino = areaDestino; }
     public Empleado getEmpleado() { return empleado; }
+    public void setEmpleado(Empleado empleado) { this.empleado = empleado; }
     
     @Override
     public String toString() {
@@ -31,5 +35,4 @@ public class Movimiento {
                ", empleado=" + empleado.getNombre() +
                '}';
     }
-    
 }

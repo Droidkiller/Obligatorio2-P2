@@ -22,6 +22,7 @@ public class ReporteMovimiento extends javax.swing.JDialog implements Observer {
     public ReporteMovimiento(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setSize(650, 380);
         this.setLocationRelativeTo(null);
     }
 
@@ -54,7 +55,7 @@ public class ReporteMovimiento extends javax.swing.JDialog implements Observer {
 
         labMes.setText("Mes:");
 
-        textMes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        textMes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
         textMes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textMesActionPerformed(evt);
@@ -63,11 +64,7 @@ public class ReporteMovimiento extends javax.swing.JDialog implements Observer {
 
         labArea.setText("Área:");
 
-        textArea.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         boxEmp.setText("Empleado:");
-
-        textEmp.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnFiltrar.setText("Filtrar");
 
@@ -143,13 +140,12 @@ public class ReporteMovimiento extends javax.swing.JDialog implements Observer {
                             .addComponent(panelFiltros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(51, 51, 51)
-                                .addComponent(panelMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(194, 194, 194)
-                        .addComponent(btnExportar)))
+                                .addComponent(panelMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnExportar)
+                .addGap(133, 133, 133)
                 .addComponent(btnCerrar)
                 .addGap(28, 28, 28))
         );
@@ -161,12 +157,15 @@ public class ReporteMovimiento extends javax.swing.JDialog implements Observer {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panelFiltros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(panelMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnExportar)
-                .addGap(18, 18, 18)
-                .addComponent(btnCerrar)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addComponent(panelMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(btnCerrar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(btnExportar)))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();

@@ -1,21 +1,17 @@
 [AREAS]
-Personal;Reclutamiento de personal, promociones, gestión de cargos;100000.0;-20.0,-20.0,-20.0,-20.0,-20.0,-20.0,-20.0,-20.0,-20.0,-520.0,-520.0,-520.0
-RRHH;Relacionamiento en la empresa, organigrama, gestión de equipos;80000.0;-103.0,-103.0,-103.0,-103.0,-103.0,-103.0,-103.0,-103.0,-103.0,147.0,147.0,147.0
+Personal;Reclutamiento de personal, promociones, gestión de cargos;100000.0;0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+RRHH;Relacionamiento en la empresa, organigrama, gestión de equipos;80000.0;0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 Seguridad;Seguridad física, vigilancia, seguridad informática, protocolos y políticas de seguridad;120000.0;0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 Comunicaciones;Comunicaciones internas, reglas y protocolos, comunicaciones con proveedores y clientes;20000.0;0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 Marketing;Acciones planificadas, publicidad en medios masivos, publicidad en redes, gestión de redes;95000.0;0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 
 [MANAGERS]
-45683691;Ana Martínez;99123456;10;123,333
+45683691;Ana Martínez;99123456;10;
+32145893;Ricardo Morales;94121212;4;
+35892575;Laura Torales;99654321;1;
 45551977;Juan Pablo Zapata;99202020;5;
-32145893;Ricardo Morales;94121212;4;343
-35892575;Laura Torales;99654321;1;3332
 
 [EMPLEADOS]
-123;fran;3332;250.0;cvs/CV123.txt;45683691;RRHH
-333;asdfa;33232;123.0;cvs/CV333.txt;45683691;Personal
-343;fran324;2131;442.0;cvs/CV343.txt;32145893;Personal
-3332;aitan;12131;20.0;cvs/CV3332.txt;35892575;RRHH
 
 [MOVIMIENTOS]
 
