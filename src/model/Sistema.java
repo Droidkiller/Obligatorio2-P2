@@ -102,10 +102,12 @@ public class Sistema {
             throw new Exception("No hay presupuesto suficiente en el área de destino.");
         }
         origen.reintegrarPresupuesto(e, mesInicio);
+        origen.quitarEmpleado(e, mesInicio);
         destino.asignarEmpleado(e, mesInicio);
         e.setArea(destino);
         notificarObservers();
     }
+    
     public void registrarMovimiento(Movimiento m) {
         movimientos.add(m);
     }

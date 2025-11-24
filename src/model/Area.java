@@ -70,7 +70,7 @@ public class Area {
         for (int m = mesInicio - 1; m < 12; m++) {
             setCostosMensuales(m, -sueldoMensual);
         }
-}
+    }
  
     @Override
     public String toString() {

@@ -4,6 +4,8 @@
  */
 package view;
 
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author Usuario
@@ -67,8 +69,6 @@ public class Bienvenida extends javax.swing.JFrame {
         panelBienvenida.setBackground(new java.awt.Color(204, 204, 255));
         panelBienvenida.setLayout(new javax.swing.BoxLayout(panelBienvenida, javax.swing.BoxLayout.LINE_AXIS));
         getContentPane().add(panelBienvenida, java.awt.BorderLayout.PAGE_START);
-
-        icon.setIcon(new javax.swing.ImageIcon("C:\\proyectos\\Obligatorio2-P2\\src\\resources\\logo.png")); // NOI18N
         getContentPane().add(icon, java.awt.BorderLayout.CENTER);
 
         labAutores.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N

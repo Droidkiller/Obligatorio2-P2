@@ -18,6 +18,7 @@ public class BajaArea extends javax.swing.JDialog implements Observer {
     public BajaArea(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

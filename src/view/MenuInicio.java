@@ -22,6 +22,7 @@ public class MenuInicio extends javax.swing.JFrame {
      */
     public MenuInicio() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -111,6 +112,7 @@ public class MenuInicio extends javax.swing.JFrame {
         new ControladorEmpleado(p);
         new ControladorReporteMovimiento(p);
         new ControladorReporteInteligente(p);
+        new ControladorReporteEstadoAreas(p);
         p.setVisible(true);
         this.dispose();
     }

@@ -18,6 +18,7 @@ public class ModificacionArea extends javax.swing.JDialog implements Observer {
     public ModificacionArea(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

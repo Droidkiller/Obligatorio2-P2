@@ -33,7 +33,8 @@ public class ControladorReporteEstadoAreas {
     private void abrirReporte() {
         ReporteEstadoAreas vista = new ReporteEstadoAreas(principal, false);
         sistema.agregarObserver(vista);
-
+        cargarAreas(vista);
+        vista.setVisible(true);
         vista.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -46,8 +47,7 @@ public class ControladorReporteEstadoAreas {
             }
         });
 
-        cargarAreas(vista);
-        vista.setVisible(true);
+        
     }
 
     private void cargarAreas(ReporteEstadoAreas vista) {

@@ -17,6 +17,7 @@ public class AltaArea extends javax.swing.JDialog implements Observer {
     public AltaArea(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -45,11 +46,6 @@ public class AltaArea extends javax.swing.JDialog implements Observer {
 
         labTitulo.setText("Áreas registradas");
 
-        listAreasReg.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane1.setViewportView(listAreasReg);
 
         nombre.setText("Nombre:");

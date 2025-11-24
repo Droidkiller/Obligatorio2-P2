@@ -223,6 +223,7 @@ public class ControladorArea {
             vista.dispose();
         });
         vista.setVisible(true);
+        refrescarEmpleadosParaOrigen(vista);
     }
 
     private void refrescarEmpleadosParaOrigen(MovimientoArea vista) {
@@ -248,22 +249,30 @@ public class ControladorArea {
 
     private void realizarMovimiento(MovimientoArea vista) {
         boolean ok = true;
+
         String origen = (String) vista.getCmbOrigen().getSelectedItem();
         String destino = (String) vista.getCmbDestino().getSelectedItem();
         String empleadoNombre = vista.getListEmpleados().getSelectedValue();
-        int mesInicio = 1;
+
+        int mesInicio = -1;
+
+        String[] meses = { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                           "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
 
         if (origen == null || destino == null || empleadoNombre == null) {
             JOptionPane.showMessageDialog(vista, "Seleccione origen, destino y empleado.");
             ok = false;
         } else {
-            try {
-                mesInicio = Integer.parseInt((String) vista.getCmbMes().getSelectedItem());
-                if (mesInicio < 1 || mesInicio > 12) {
-                    JOptionPane.showMessageDialog(vista, "Mes inválido.");
-                    ok = false;
+            String mesNombre = (String) vista.getCmbMes().getSelectedItem();
+            boolean encontre=false;
+            for (int i = 0; i < meses.length && !encontre; i++) {
+                if (meses[i].equalsIgnoreCase(mesNombre)) {
+                    mesInicio = i + 1;
+                    encontre=true;
                 }
-            } catch (NumberFormatException ex) {
+            }
+
+            if (mesInicio == -1) {
                 JOptionPane.showMessageDialog(vista, "Mes inválido.");
                 ok = false;
             }
@@ -273,11 +282,14 @@ public class ControladorArea {
             Area aOrigen = sistema.buscarAreaPorNombre(origen);
             Area aDestino = sistema.buscarAreaPorNombre(destino);
             Empleado empleado = null;
+
             if (aOrigen != null) {
-                for (Empleado e : aOrigen.getEmpleados()) {
-                    if (e.getNombre().equalsIgnoreCase(empleadoNombre)) {
-                        empleado = e;
-                        break;
+                boolean encontre=false;
+                ArrayList<Empleado> empleados = aOrigen.getEmpleados();
+                for (int i=0;i<empleados.size() && !encontre;i++) {
+                    if (empleados.get(i).getNombre().equalsIgnoreCase(empleadoNombre)) {
+                        empleado = empleados.get(i);
+                        encontre=true;
                     }
                 }
             }
@@ -285,7 +297,6 @@ public class ControladorArea {
             if (aOrigen == null || aDestino == null || empleado == null) {
                 JOptionPane.showMessageDialog(vista, "Datos inválidos, reintente.");
             } else {
-                
                 boolean puede = sistema.puedeMoverEmpleado(empleado, aDestino, mesInicio);
                 if (!puede) {
                     JOptionPane.showMessageDialog(vista, "No hay presupuesto suficiente en el área destino.");
@@ -293,8 +304,9 @@ public class ControladorArea {
                     try {
                         sistema.moverEmpleado(empleado, aOrigen, aDestino, mesInicio);
                         sistema.notificarObservers();
+
                         JOptionPane.showMessageDialog(vista, "Movimiento realizado.");
-                        refrescarEmpleadosParaOrigen(vista); 
+
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(vista, ex.getMessage());
                     }

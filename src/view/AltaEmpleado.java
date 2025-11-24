@@ -17,8 +17,8 @@ public class AltaEmpleado extends javax.swing.JDialog implements Observer{
     public AltaEmpleado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        cmbManagers.setModel(new javax.swing.DefaultComboBoxModel<Manager>());
-        cmbAreas.setModel(new javax.swing.DefaultComboBoxModel<Area>());
+        actualizar();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -60,11 +60,6 @@ public class AltaEmpleado extends javax.swing.JDialog implements Observer{
 
         jLabel1.setText("Empleados registrados:");
 
-        listEmp.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane1.setViewportView(listEmp);
 
         labNom.setText("Nombre:");
@@ -302,47 +297,31 @@ public class AltaEmpleado extends javax.swing.JDialog implements Observer{
         }
     }
     
-    public String getNombre() {
-        return textNom.getText();
-    }
-
-    public int getCedula() {
-        return Integer.parseInt(textCed.getText());
-    }
-
-    public int getCelular() {
-        return Integer.parseInt(textCel.getText());
-    }
-
-    public double getSalario() {
-        return Double.parseDouble(textSal.getText());
-    }
-
-    public String getCvTexto() {
-        return textCV.getText();
-    }
-
-    public Manager getManagerSeleccionado() {
-        return (Manager) cmbManagers.getSelectedItem();
-    }
-
-    public Area getAreaSeleccionada() {
-        return (Area) cmbAreas.getSelectedItem();
+    public void setEmpleados(ArrayList<Empleado> empleados) {
+        javax.swing.DefaultListModel<String> model = new javax.swing.DefaultListModel<>();
+        for (Empleado e : empleados) {
+            model.addElement(e.getNombre());
+        }
+        listEmp.setModel(model);
     }
     
-    public javax.swing.JButton getBtnCrear() {
-        return btnCrear;
-    }
-
-    public javax.swing.JButton getBtnCerrar() {
-        return btnCerrar;
-    }
+    public String getNombre() {return textNom.getText();}
+    public int getCedula() {return Integer.parseInt(textCed.getText());}
+    public int getCelular() {return Integer.parseInt(textCel.getText());}
+    public double getSalario() {return Double.parseDouble(textSal.getText());}
+    public String getCvTexto() {return textCV.getText();}
+    public Manager getManagerSeleccionado() {return (Manager) cmbManagers.getSelectedItem();}
+    public Area getAreaSeleccionada() {return (Area) cmbAreas.getSelectedItem();}    
+    public javax.swing.JButton getBtnCrear() {return btnCrear;}
+    public javax.swing.JButton getBtnCerrar() {return btnCerrar;}
+    public javax.swing.JList<String> getListEmpleados() { return listEmp; }
     
     @Override
     public void actualizar() {
         var sistema = Sistema.getInstancia();
         setManagers(sistema.getManagers());
         setAreas(sistema.getAreas());
+        setEmpleados(sistema.getEmpleados());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
